@@ -34,7 +34,7 @@ const StyledNavLink = styled(NavLink)`
   &:active,
   &.active:link,
   &.active:visited {
-    color: var(--color-grey-7);
+    color: var(--color-grey-9);
     background-color: var(--color-grey-4);
     /* border-radius: var(--border-radius-sm); */
     border-radius: 5px;
@@ -43,7 +43,7 @@ const StyledNavLink = styled(NavLink)`
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-grey-7);
+    color: var(--color-grey-7); //initial color
     transition: all 0.3s;
   }
 
@@ -51,7 +51,7 @@ const StyledNavLink = styled(NavLink)`
   &:active svg,
   &.active:link svg,
   &.active:visited svg {
-    color: var(--color-grey-6);
+    color: var(--color-grey-9); // color when current route and when hovered on
   }
 `;
 
