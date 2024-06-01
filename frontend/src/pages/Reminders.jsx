@@ -1,12 +1,12 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 
-function Reports() {
+function Reminders() {
   return (
     <Row type="horizontal">
-      <Heading as="h1">Reports and Statistics</Heading>
+      <Heading as="h1">Reminders</Heading>
     </Row>
   );
 }
 
-export default Reports;
+export default Reminders;

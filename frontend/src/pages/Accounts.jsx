@@ -1,8 +1,11 @@
+import Heading from "../ui/Heading";
+import Row from "../ui/Row";
+
 function Accounts() {
   return (
-    <div>
-      <h1>Accounts</h1>
-    </div>
+    <Row type="horizontal">
+      <Heading as="h1">Accounts</Heading>
+    </Row>
   );
 }
 

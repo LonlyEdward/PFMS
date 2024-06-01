@@ -7,7 +7,6 @@ import {
 } from "react-icons/md";
 import { BsBarChartLine, BsCalendarCheck } from "react-icons/bs";
 import { TbArrowsRightLeft } from "react-icons/tb";
-import { IoSettingsOutline } from "react-icons/io5";
 
 const NavList = styled.ul`
   display: flex;
@@ -36,8 +35,7 @@ const StyledNavLink = styled(NavLink)`
   &.active:visited {
     color: var(--color-grey-9);
     background-color: var(--color-grey-4);
-    /* border-radius: var(--border-radius-sm); */
-    border-radius: 5px;
+    border-radius: var(--border-radius-sm);
   }
 
   & svg {
@@ -84,21 +82,15 @@ function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/Remainders">
+          <StyledNavLink to="/Reminders">
             <MdOutlineTimer />
-            <span>Remainders</span>
+            <span>Reminders</span>
           </StyledNavLink>
         </li>
         <li>
           <StyledNavLink to="/reports">
             <BsBarChartLine />
             <span>Reports</span>
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/settings">
-            <IoSettingsOutline />
-            <span>Settings</span>
           </StyledNavLink>
         </li>
       </NavList>

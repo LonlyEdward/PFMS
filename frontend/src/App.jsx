@@ -5,12 +5,13 @@ import Dashboard from "./pages/Dashboard";
 import Accounts from "./pages/Accounts";
 import Transactions from "./pages/Transactions";
 import Budgets from "./pages/Budgets";
-import Remainders from "./pages/Remainders";
+import Reminders from "./pages/Reminders";
 import Settings from "./pages/Settings";
 import Reports from "./pages/Reports";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AppLayout from "./ui/AppLayout";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -24,15 +25,14 @@ function App() {
             <Route path="accounts" element={<Accounts />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="budgets" element={<Budgets />} />
-            <Route path="remainders" element={<Remainders />} />
+            <Route path="reminders" element={<Reminders />} />
             <Route path="reports" element={<Reports />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
-          {/* <Route path="*" element={<PageNotFound />} /> */}
-          <Route path="*" element={<h1>Page Not Found</h1>} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </>
