@@ -31,8 +31,10 @@ class Transfer(models.Model):
     amount = models.DecimalField(max_digits=9, decimal_places=2)
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # fromAccount =
-    # toAccount =
+    from_account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='from_transfers')
+    to_account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='to_transfers')
 
     def __str__(self):
         return self.name
