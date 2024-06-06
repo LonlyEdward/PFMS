@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 const Styledul = styled.ul`
   text-align: center;
-`
+`;
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -41,11 +41,11 @@ function LoginForm() {
       </FormRow>
       <FormRow orientation="vertical">
         <Styledul>
-         <li> Don't have an account yet? <Link to={"signup"}>Sign up</Link></li>
+          <li>
+            {" "}
+            Don't have an account yet? <Link to={"/SignUp"}>Sign up</Link>
+          </li>
         </Styledul>
-        {/* <p>
-          Don't have an account yet? <Link to={"./signup"}>Sign up</Link>
-        </p> */}
       </FormRow>
     </Form>
   );
