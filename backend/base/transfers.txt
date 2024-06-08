@@ -14,6 +14,8 @@ Here's a simplified example of how you could implement these steps:
 
 python
 Copy code
+
+
 # models.py
 from django.db import models
 from django.contrib.auth.models import User

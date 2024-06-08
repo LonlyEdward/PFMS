@@ -5,9 +5,19 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import styled from "styled-components";
+import Heading from "../../ui/Heading";
+import Title from "../../ui/Title";
 
 const Styledul = styled.ul`
   text-align: center;
+`;
+
+const Styledspan = styled.span`
+  color: var(--secondary-color-20);
+
+  &:hover {
+    color: var(--secondary-color-40);
+  }
 `;
 
 function LoginForm() {
@@ -18,7 +28,9 @@ function LoginForm() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormRow label="Email address" orientation="vertical">
+      <Title>PFMS</Title>
+      <Heading as="h4">Log in to your account</Heading>
+      <FormRow label="Email" orientation="vertical">
         <Input
           type="email"
           id="email"
@@ -37,13 +49,15 @@ function LoginForm() {
         />
       </FormRow>
       <FormRow orientation="vertical">
-        <Button size="large">Login</Button>
+        <Button size="large">Log in</Button>
       </FormRow>
       <FormRow orientation="vertical">
         <Styledul>
           <li>
-            {" "}
-            Don't have an account yet? <Link to={"/SignUp"}>Sign up</Link>
+            Don't have an account yet?{" "}
+            <Link to={"/SignUp"}>
+              <Styledspan>Sign up</Styledspan>
+            </Link>
           </li>
         </Styledul>
       </FormRow>

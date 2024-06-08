@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import Logo from "./Logo";
 import MainNav from "./MainNav";
+import Title from "./Title";
 
 const StyledSidebar = styled.aside`
-  background-color: var(--color-grey-2);
+  background-color: var(--primary-color-50);
   padding: 3.2rem 2.4rem;
-  border-right: 1px solid var(--color-grey-4);
+  border-right: 1px solid var(--primary-color-50);
 
   grid-row: 1 / -1;
   display: flex;
@@ -13,10 +13,14 @@ const StyledSidebar = styled.aside`
   gap: 3.2rem;
 `;
 
+const DashTitle = styled(Title)`
+  font-size: 5rem;
+`;
+
 function Sidebar() {
   return (
     <StyledSidebar>
-      <Logo />
+      <DashTitle>PFMS</DashTitle>
       <MainNav />
     </StyledSidebar>
   );
