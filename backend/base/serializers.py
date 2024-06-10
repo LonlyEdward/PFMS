@@ -44,10 +44,10 @@ class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
         fields = ['id', 'name', 'description', 'amount',
-                  'start_date', 'end', 'date_created']
+                  'start_date', 'end_date', 'date_created']
 
 
-class BudgetentrySerializer(serializers.ModelSerializer):
+class BudgetEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = BudgetEntry
         fields = ['id', 'name', 'amount']

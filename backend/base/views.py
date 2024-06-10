@@ -1,23 +1,18 @@
-# from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from django.http import JsonResponse
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import viewsets
 from .models import User, AccountType, Account, Transfer, TransactionType, Transaction, Budget, BudgetEntry, Reminder
-from .serializers import UserSerializer, AccountTypeSerializer, AccountSerializer, TransferSerializer, TransactionTypeSerializer, TransactionSerializer, BudgetSerializer, BudgetentrySerializer, ReminderSerializer
+from .serializers import UserSerializer, AccountTypeSerializer, AccountSerializer, TransferSerializer, TransactionTypeSerializer, TransactionSerializer, BudgetSerializer, BudgetEntrySerializer, ReminderSerializer
 
 
-# Accounts view
-@api_view(['Get', 'POST'])
-def account_list(request):
+class ReminderViewSet(viewsets.ModelViewSet):
+    queryset = Reminder.objects.all()
+    serializer_class = ReminderSerializer
 
-    if request.method == 'GET':
-        accounts = Account.objects.all()
-        serializer = AccountSerializer(accounts, many=True)
-        return JsonResponse({'base': serializer.data})
 
-    if request.method == 'POST':
-        serializer = AccountSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+class BudgetViewSet(viewsets.ModelViewSet):
+    queryset = Budget.objects.all()
+    serializer_class = BudgetSerializer
+
+
+class BudgetEntryViewSet(viewsets.ModelViewSet):
+    queryset = BudgetEntry.objects.all()
+    serializer_class = BudgetEntrySerializer
