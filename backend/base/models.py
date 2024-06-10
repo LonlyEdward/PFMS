@@ -4,10 +4,17 @@ from django.db import models
 
 
 class User(models.Model):
-    name = models.CharField(max_length=30)
+    full_name = models.CharField(max_length=30)
     username = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.full_name
+    
+
+class AccountType(models.Model):
+    name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
@@ -16,10 +23,12 @@ class User(models.Model):
 class Account(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
-    amount = models.DecimalField(max_digits=9, decimal_places=2)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
     date_created = models.DateField(auto_now_add=True)
     date_updated = models.DateField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    accounttype = models.ForeignKey(
+        AccountType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -28,7 +37,7 @@ class Account(models.Model):
 class Transfer(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
-    amount = models.DecimalField(max_digits=9, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     from_account = models.ForeignKey(
@@ -50,7 +59,7 @@ class TransactionType(models.Model):
 class Transaction(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
-    amount = models.DecimalField(max_digits=9, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transactiontype = models.ForeignKey(
@@ -65,7 +74,7 @@ class Transaction(models.Model):
 class Budget(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
-    amount = models.DecimalField(max_digits=9, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()
     end_date = models.DateField()
     date_created = models.DateField(auto_now_add=True)
@@ -77,7 +86,7 @@ class Budget(models.Model):
 
 class BudgetEntry(models.Model):
     name = models.CharField(max_length=30)
-    amount = models.DecimalField(max_digits=9, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -94,19 +103,11 @@ class Reminder(models.Model):
         return self.name
 
 
-class Report(models.Model):
-    name = models.CharField(max_length=30)
-    date_created = models.DateField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-# class TransactionType(models.Model):
+# class Report(models.Model):
 #     name = models.CharField(max_length=30)
-#     transaction = models.OneToOneField(
-#         Transaction, null=True, blank=True, on_delete=models.CASCADE)
+#     date_created = models.DateField()
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 #     def __str__(self):
 #         return self.name
+

@@ -1,21 +1,23 @@
-from django.shortcuts import render
-from django.db import transaction
-from .models import Transfer
+# from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User, AccountType, Account, Transfer, TransactionType, Transaction, Budget, BudgetEntry, Reminder
+from .serializers import UserSerializer, AccountTypeSerializer, AccountSerializer, TransferSerializer, TransactionTypeSerializer, TransactionSerializer, BudgetSerializer, BudgetentrySerializer, ReminderSerializer
 
-# Create your views here.
 
-def transfer_funds(from_account, to_account, amount):
-    if from_account == to_account:
-        raise ValueError("Cannot transfer funds between the same account.")
-    if amount <= 0:
-        raise ValueError("Transfer amount must be positive.")
+# Accounts view
+@api_view(['Get', 'POST'])
+def account_list(request):
 
-    with transaction.atomic():  # Ensure data integrity
-        from_account.balance -= amount
-        from_account.save()
-        to_account.balance += amount
-        to_account.save()
+    if request.method == 'GET':
+        accounts = Account.objects.all()
+        serializer = AccountSerializer(accounts, many=True)
+        return JsonResponse({'base': serializer.data})
 
-    # Create a new Transfer object after successful transaction
-    transfer = Transfer.objects.create(from_account=from_account, to_account=to_account, amount=amount)
-    return transfer
+    if request.method == 'POST':
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -55,7 +55,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173/",  # React frontend URL
+    "http://localhost:5173",  # React frontend URL
+    "http://127.0.0.1:5173",  # React frontend URL
 ]
 
 ROOT_URLCONF = 'backend.urls'
