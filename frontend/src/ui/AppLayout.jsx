@@ -4,8 +4,9 @@ import Header from "./Header";
 import styled from "styled-components";
 
 const Main = styled.main`
-  background-color: var(--color-grey-1);
+  background-color: var(--color-grey-3);
   padding: 4rem 4.8rem 6.4rem;
+  /* z-index: -1; */
 `;
 
 const StyledAppLaout = styled.div`

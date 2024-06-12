@@ -56,4 +56,5 @@ class BudgetEntrySerializer(serializers.ModelSerializer):
 class ReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reminder
-        fields = ['id', 'name', 'description', 'date']
+        fields = ['id', 'name', 'description', 'date', 'user']
+        # fields = fields = ['__all__']

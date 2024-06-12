@@ -2,10 +2,10 @@ import styled from "styled-components";
 import HeaderMenu from "./HeaderMenu";
 
 const StyledHeader = styled.header`
-  background-color: var(--color-grey-2);
-  /* background-color: var(--secondary-color-20); */
   padding: 1.2rem 4.8rem;
-  border-bottom: 1px solid var(--color-grey-4);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px;
+  z-index: 1;
+  /* border-bottom: 1px solid var(--color-grey-4); */
 `;
 
 function Header() {

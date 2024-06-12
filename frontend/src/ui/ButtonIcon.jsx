@@ -8,7 +8,8 @@ const ButtonIcon = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background-color: var(--color-grey-1);
+    /* background-color: var(--color-grey-1); */
+    color: var(--secondary-color-20);
   }
 
   & svg {
