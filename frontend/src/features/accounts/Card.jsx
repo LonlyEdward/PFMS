@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import Button from '../../ui/Button';
 
 const CardButton = styled(Button)`
-  background-color: var(--primary-color-20);
+  background-color: var(--primary-color-10);
   &:hover {
-  background-color: var(--primary-color-40);
+  background-color: var(--primary-color-30);
   }
 `;
 
