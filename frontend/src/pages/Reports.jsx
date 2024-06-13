@@ -2,12 +2,15 @@ import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import Modal from "../ui/Modal";
 import { useState } from "react";
+import React from "react";
+import Button from "../ui/Button";
 
 function Reports() {
-  const [isModalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <>
@@ -15,10 +18,21 @@ function Reports() {
         <Heading as="h1">Reports and Statistics</Heading>
       </Row>
 
-      <h1>Reusable Modal Example</h1>
-      <button onClick={openModal}>Open Modal</button>
-      <Modal isOpen={isModalOpen} title="My Modal" onClose={closeModal}>
-        <p>This is the content of the modal.</p>
+
+      <button onClick={handleOpenModal}>Open Modal</button>
+      
+      <Modal
+        show={showModal}
+        handleClose={handleCloseModal}
+        title="Example Modal"
+        footer={
+          <>
+            <Button onClick={handleCloseModal}>Close</Button>
+            {/* <Button onClick={() => alert('Saving changes...')}>Save Changes</Button> */}
+          </>
+        }
+      >
+        <p>This is the content of the modal. You can add any React elements here.</p>
       </Modal>
     </>
   );
