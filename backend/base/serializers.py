@@ -17,44 +17,40 @@ class AccountTypeSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = fields = ['id', 'name', 'description',
-                           'balance', 'date_created']
+        fields = '__all__'
 
 
 class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
-        fields = fields = ['id', 'name', 'description',
-                           'amount', 'from_account', 'to_account']
+        fields = '__all__'
 
 
 class TransactionTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionType
-        fields = fields = ['__all__']
+        fields = fields = '__all__'
 
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = fields = ['id', 'name', 'description', 'amount', 'date']
+        fields = '__all__'
 
 
 class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
-        fields = ['id', 'name', 'description', 'amount',
-                  'start_date', 'end_date', 'date_created']
+        fields = '__all__'
 
 
 class BudgetEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = BudgetEntry
-        fields = ['id', 'name', 'amount']
+        fields = '__all__'
 
 
 class ReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reminder
-        fields = ['id', 'name', 'description', 'date', 'user']
-        # fields = fields = ['__all__']
+        fields = fields = '__all__'
