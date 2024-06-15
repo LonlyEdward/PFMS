@@ -11,9 +11,11 @@ const StyledHeader = styled.header`
 
 function Header() {
   return (
-    <StyledHeader>
-      <HeaderMenu />
-    </StyledHeader>
+    <>
+      <StyledHeader>
+        <HeaderMenu />
+      </StyledHeader>
+    </>
   );
 }
 

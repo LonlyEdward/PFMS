@@ -9,7 +9,7 @@ const HeaderCell = styled.th`
   padding: 0.8rem;
   text-align: center;
   color: var(--color-grey-3);
-  background-color: var(--secondary-color-20);
+  background-color: var(--secondary-color-30);
 `;
 
 const TableHeader = ({ columns }) => {

@@ -39,7 +39,7 @@ const variations = {
     }
   `,
   danger: css`
-    color: var(--color-red-100);
+    color: var(--color-grey-1);
     background-color: var(--color-red-700);
 
     &:hover {

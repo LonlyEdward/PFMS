@@ -33,8 +33,9 @@ const StyledNavLink = styled(NavLink)`
   &.active:link,
   &.active:visited {
     color: var(--secondary-color-20);
-    font-size: large;
+    /* font-size: large; */
     border-radius: var(--border-radius-sm);
+    transform: scale(1.1);
   }
 
   & svg {

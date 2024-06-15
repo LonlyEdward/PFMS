@@ -3,10 +3,22 @@ import Button from "../../ui/Button";
 import { useState } from "react";
 import Modal from "../../ui/Modal";
 import NewAccountForm from "./NewAccountForm";
+import NewTransferForm from "./NewTransferForm";
 
 const Sdiv = styled.div`
   display: flex;
   gap: 2rem;
+`;
+
+const CButton = styled(Button)`
+  background-color: var(--color-grey-1);
+  color: var(--color-grey-7);
+  border: 2px solid var(--color-grey-5);
+
+  &:hover {
+    background-color: var(--color-grey-3);
+    border: 2px solid var(--color-grey-6);
+  }
 `;
 
 function AccountsOperations() {
@@ -29,11 +41,12 @@ function AccountsOperations() {
       <Modal
         show={showAccountModal}
         handleClose={handleCloseAccountModal}
-        title="Create New Account"
+        title="Add New Account"
         footer={
           <>
-            <Button>Create Account</Button>&nbsp;&nbsp;&nbsp;
-            <Button onClick={handleCloseAccountModal}>Close</Button>
+            <CButton onClick={handleCloseAccountModal}>Cancel</CButton>
+            &nbsp;&nbsp;&nbsp;
+            <Button>Add Account</Button>&nbsp;&nbsp;&nbsp;
           </>
         }
       >
@@ -45,11 +58,13 @@ function AccountsOperations() {
         title="New Transfer"
         footer={
           <>
-            <Button onClick={handleCloseTransferModal}>Close</Button>
+            <CButton onClick={handleCloseTransferModal}>Cancel</CButton>
+            &nbsp;&nbsp;&nbsp;
+            <Button>Confirm Transfer</Button>
           </>
         }
       >
-        <p>New Transfer Form</p>
+        <NewTransferForm />
       </Modal>
     </>
   );

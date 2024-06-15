@@ -120,9 +120,9 @@ const GlobalStyles = createGlobalStyle`
 
 
 
-    --color-red-100: #fee2e2;
-    --color-red-700: #b91c1c;
-    --color-red-800: #991b1b;
+  --color-red-100: #e64545;
+  --color-red-700: #cc3e3e;
+  --color-red-800: #b33636;
 
 
     /* border radius */

@@ -38,13 +38,13 @@ const accounts = [
   },
 ];
 
-const handleEdit = (account) => {
-  alert(`Editing: ${account.name}`);
-};
+// const handleEdit = (account) => {
+//   alert(`Editing: ${account.name}`);
+// };
 
-const handleDelete = (account) => {
-  alert(`Deleting: ${account.name}`);
-};
+// const handleDelete = (account) => {
+//   alert(`Deleting: ${account.name}`);
+// };
 
 function Accounts() {
 
@@ -60,8 +60,8 @@ function Accounts() {
           <Card
             key={index}
             account={account}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+            // onEdit={handleEdit}
+            // onDelete={handleDelete}
           />
         ))}
       </Row>

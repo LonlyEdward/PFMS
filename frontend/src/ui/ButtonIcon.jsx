@@ -10,6 +10,7 @@ const ButtonIcon = styled.button`
   &:hover {
     /* background-color: var(--color-grey-1); */
     color: var(--secondary-color-20);
+    transform: scale(1.1);
   }
 
   & svg {

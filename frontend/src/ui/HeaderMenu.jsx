@@ -24,7 +24,7 @@ function HeaderMenu() {
       </li>
       <li>
         <ButtonIcon>
-        <span>"Username"</span>
+          <span>"Username"</span>
         </ButtonIcon>
       </li>
       <li>

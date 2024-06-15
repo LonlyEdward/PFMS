@@ -7,6 +7,7 @@ const TableWrapper = styled.table`
   margin-top: 2rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: var(--secondary-color-20);
+  /* border-radius: 5px; */
 `;
 
 const Table = ({ children }) => {
