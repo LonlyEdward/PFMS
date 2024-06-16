@@ -36,6 +36,7 @@ const StyledNavLink = styled(NavLink)`
     /* font-size: large; */
     border-radius: var(--border-radius-sm);
     transform: scale(1.1);
+    background-color: var(--secondary-color-1);
   }
 
   & svg {

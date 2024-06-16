@@ -36,6 +36,12 @@ const accounts = [
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     type: "Investment",
   },
+  {
+    name: "Investment Account",
+    balance: 12000.0,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    type: "Investment",
+  },
 ];
 
 // const handleEdit = (account) => {

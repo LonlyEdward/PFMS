@@ -6,7 +6,8 @@ const StyledSidebar = styled.aside`
   /* background-color: var(--primary-color-50); */
   padding: 3.2rem 2.4rem;
   background-color: var(--color-grey-1);
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   /* border-right: 1px solid var(--primary-color-50); */
 
   grid-row: 1 / -1;
@@ -14,6 +15,7 @@ const StyledSidebar = styled.aside`
   flex-direction: column;
   gap: 3.2rem;
   z-index: 2;
+  overflow: hidden;
 `;
 
 const DashTitle = styled(Title)`

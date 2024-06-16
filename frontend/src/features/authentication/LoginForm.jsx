@@ -29,7 +29,7 @@ function LoginForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <Title>PFMS</Title>
-      <Heading as="h4">Log in to your account</Heading>
+      <Heading as="h4">Login to your account</Heading>
       <FormRow label="Email" orientation="vertical">
         <Input
           type="email"
@@ -49,14 +49,14 @@ function LoginForm() {
         />
       </FormRow>
       <FormRow orientation="vertical">
-        <Button size="large">Log in</Button>
+        <Button size="large">Login</Button>
       </FormRow>
       <FormRow orientation="vertical">
         <Styledul>
           <li>
-            Don't have an account yet?{" "}
+            Don't have an account yet?
             <Link to={"/SignUp"}>
-              <Styledspan>Sign up</Styledspan>
+              <Styledspan> Sign up</Styledspan>
             </Link>
           </li>
         </Styledul>

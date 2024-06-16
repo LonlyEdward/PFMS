@@ -2,7 +2,7 @@ import styled from "styled-components";
 import HeaderMenu from "./HeaderMenu";
 
 const StyledHeader = styled.header`
-  padding: 1.2rem 4.8rem;
+  padding: 0.8rem 4.9rem;
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px;
   background-color: var(--color-grey-1);
   z-index: 1;

@@ -6,6 +6,10 @@ const RowWrapper = styled.tr`
     background-color: #f9f9f9;
   } */
   background-color: var(--color-grey-1);
+
+  &:hover {
+    background-color: var(--color-grey-3);
+  }
 `;
 
 const TableRow = ({ children }) => {

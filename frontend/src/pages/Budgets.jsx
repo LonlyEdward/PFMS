@@ -152,6 +152,38 @@ function Budgets() {
           ))}
         </tbody>
       </Table>
+      <Table>
+        <TableHeader columns={columns} />
+        <tbody>
+          {data.map((row, index) => (
+            <TableRow key={index}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.description}</TableCell>
+              <TableCell>{row.amount}</TableCell>
+              <TableCell>{row.date_created}</TableCell>
+              <TableCell>{row.start_date}</TableCell>
+              <TableCell>{row.end_date}</TableCell>
+              <TableCell>
+                <SButton size="small" onClick={handleOpenEditModal}>
+                  Edit{" "}
+                </SButton>
+                &nbsp;
+                <SButton size="small" onClick={handleOpenBudgetModal}>
+                  View
+                </SButton>
+                &nbsp;
+                <Button
+                  size="small"
+                  variation="danger"
+                  onClick={handleOpenDeleteModal}
+                >
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </tbody>
+      </Table>
 
       <Modal
         show={showEditModal}

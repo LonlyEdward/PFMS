@@ -31,7 +31,7 @@ function SignupForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <Title>PFMS</Title>
-      <Heading as="h4">Sign up</Heading>
+      <Heading as="h4">Create Account</Heading>
       <FormRow label="Full name" orientation="vertical">
         <Input
           type="text"
@@ -54,7 +54,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
-          autoComplete="first_name"
+          autoComplete="name"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -69,14 +69,14 @@ function SignupForm() {
         />
       </FormRow>
       <FormRow orientation="vertical">
-        <Button size="large">Create account</Button>
+        <Button size="large">Sign Up</Button>
       </FormRow>
       <FormRow orientation="vertical">
         <Styledul>
           <li>
-            Already have an account?{" "}
+            Already have an account?
             <Link to={"/Login"}>
-              <Styledspan>Log in</Styledspan>
+              <Styledspan> Login</Styledspan>
             </Link>
           </li>
         </Styledul>

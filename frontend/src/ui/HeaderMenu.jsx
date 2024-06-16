@@ -1,10 +1,12 @@
 import styled from "styled-components";
 // import Logout from "../features/authentication/Logout";
 import ButtonIcon from "./ButtonIcon";
-import { IoSettingsOutline } from "react-icons/io5";
+// import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import { FaRegCircleUser } from "react-icons/fa6";
+// import { FaRegCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+
+import { FaRegUser } from "react-icons/fa6";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -17,7 +19,7 @@ function HeaderMenu() {
 
   return (
     <StyledHeaderMenu>
-      <li>
+      {/* <li>
         <ButtonIcon>
           <FaRegCircleUser />
         </ButtonIcon>
@@ -26,15 +28,19 @@ function HeaderMenu() {
         <ButtonIcon>
           <span>"Username"</span>
         </ButtonIcon>
-      </li>
+      </li> */}
       <li>
         <ButtonIcon onClick={() => navigate("/settings")}>
-          <IoSettingsOutline />
+          {/* <IoSettingsOutline />&nbsp; */}
+          <FaRegUser />&nbsp;
+          {/* <span>Settings</span> */}
+          <span>Profile</span>
         </ButtonIcon>
       </li>
       <li>
         <ButtonIcon>
-          <MdOutlineLogout />
+          <MdOutlineLogout />&nbsp;
+          <span>Logout</span>
         </ButtonIcon>
       </li>
       <li>{/* <Logout /> */}</li>
