@@ -24,12 +24,14 @@ const CButton = styled(Button)`
 `;
 
 const SCard = styled.div`
-  border-top: 1px solid var(--primary-color-20);
-  border-right: 3px solid var(--secondary-color-20);
-  border-radius: var(--border-radius-md);
+  /* border-top: 1px solid var(--primary-color-20); */
+  /* border: 1px solid var(--secondary-color-20); */
+  border-radius: var(--border-radius-lg);
   padding: 16px;
   margin: 16px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; */
+  /* box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
   background-color: var(--color-grey-1);
   color: var(--color-grey-2);
   width: 30%;
