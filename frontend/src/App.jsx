@@ -13,6 +13,12 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AppLayout from "./ui/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
+import ProtectedRoute from "./ui/ProtectedRoute";
+
+// function Logout() {
+//   localStorage.clear()
+//   return <Navigate to="/login" />
+// }
 
 function App() {
   return (
@@ -20,7 +26,14 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          {/* <Route element={<AppLayout />}> */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="accounts" element={<Accounts />} />

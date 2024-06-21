@@ -1,17 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
 
-
-class User(models.Model):
-    full_name = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
+class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
-        return self.full_name
-    
+        return self.email
+
 
 class AccountType(models.Model):
     name = models.CharField(max_length=30)
@@ -26,7 +24,7 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2)
     date_created = models.DateField(auto_now_add=True)
     date_updated = models.DateField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     accounttype = models.ForeignKey(
         AccountType, on_delete=models.CASCADE)
 
@@ -39,7 +37,7 @@ class Transfer(models.Model):
     description = models.TextField(max_length=100, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     from_account = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name='from_transfers')
     to_account = models.ForeignKey(
@@ -61,7 +59,7 @@ class Transaction(models.Model):
     description = models.TextField(max_length=100, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     transactiontype = models.ForeignKey(
         TransactionType, on_delete=models.CASCADE)
     # transactiontype = models.ManyToManyField(
@@ -78,7 +76,7 @@ class Budget(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     date_created = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -97,7 +95,7 @@ class Reminder(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
     date = models.DateField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -110,4 +108,3 @@ class Reminder(models.Model):
 
 #     def __str__(self):
 #         return self.name
-

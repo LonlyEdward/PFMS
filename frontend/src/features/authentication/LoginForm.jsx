@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/constants";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -21,47 +25,104 @@ const Styledspan = styled.span`
 `;
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  function handleSubmit() {}
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/login/",
+        formData
+      );
+      console.log("success", response.data);
+      setSuccessMessage("Login Successfull");
+      localStorage.setItem(ACCESS_TOKEN, response.data.tokens.access);
+      localStorage.setItem(REFRESH_TOKEN, response.data.tokens.refresh);
+      navigate("/dashboard");
+      // localStorage.setItem("access", response.data.tokens.access);
+      // localStorage.setItem("refreshToken", response.data.tokens.refresh);
+      // navigate("/dashboard");
+    } catch (error) {
+      console.log("Error during login!", error.response?.data);
+      if (error.response && error.response.data) {
+        Object.keys(error.response.data).forEach((field) => {
+          const errorMessages = error.response.data[field];
+          if (errorMessages && errorMessages.length > 0) {
+            setError(errorMessages[0]);
+          }
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Title>PFMS</Title>
-      <Heading as="h4">Login to your account</Heading>
-      <FormRow label="Email" orientation="vertical">
-        <Input
-          type="email"
-          id="email"
-          autoComplete="username"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </FormRow>
-      <FormRow label="Password" orientation="vertical">
-        <Input
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </FormRow>
-      <FormRow orientation="vertical">
-        <Button size="large">Login</Button>
-      </FormRow>
-      <FormRow orientation="vertical">
-        <Styledul>
-          <li>
-            Don't have an account yet?
-            <Link to={"/SignUp"}>
-              <Styledspan> Sign up</Styledspan>
-            </Link>
-          </li>
-        </Styledul>
-      </FormRow>
-    </Form>
+    <>
+      {error && <p>{error}</p>}
+      {successMessage && <p>{successMessage}</p>}
+      <Form>
+        <Title>PFMS</Title>
+        <Heading as="h4">Login to your account</Heading>
+        <FormRow label="Email" orientation="vertical">
+          <Input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </FormRow>
+        <FormRow label="Password" orientation="vertical">
+          <Input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </FormRow>
+        <FormRow orientation="vertical">
+          <Button
+            size="large"
+            type="submit"
+            disabled={isLoading}
+            onClick={handleSubmit}
+          >
+            Login
+          </Button>
+        </FormRow>
+        <FormRow orientation="vertical">
+          <Styledul>
+            <li>
+              Don't have an account yet?
+              <Link to={"/SignUp"}>
+                <Styledspan> Sign up</Styledspan>
+              </Link>
+            </li>
+          </Styledul>
+        </FormRow>
+      </Form>
+    </>
   );
 }
 

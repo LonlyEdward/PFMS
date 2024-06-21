@@ -1,12 +1,12 @@
 import styled from "styled-components";
-// import Logout from "../features/authentication/Logout";
 import ButtonIcon from "./ButtonIcon";
-// import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-// import { FaRegCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-
+import React from 'react'
 import { FaRegUser } from "react-icons/fa6";
+import axios from "axios";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants";
+// import { Navigate } from "react-router-dom";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -14,36 +14,81 @@ const StyledHeaderMenu = styled.ul`
   gap: 0.4rem;
 `;
 
+// const handleLogout = async () => {
+//   try {
+//     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+//     if (refreshToken) {
+//       await axios.post("http://127.0.0.1:8000/api/logout/", {
+//         refresh: refreshToken,
+//       });
+//       localStorage.removeItem(ACCESS_TOKEN);
+//       localStorage.removeItem(REFRESH_TOKEN);
+//     }
+//   } catch (error) {
+//     console.log("failed to logout", error);
+//   }
+// };
+
+
+const handleLogout = async () => {
+  try {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    if (refreshToken) {
+      await axios.post("http://127.0.0.1:8000/api/logout/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': ACCESS_TOKEN
+        },
+      });
+      localStorage.removeItem(ACCESS_TOKEN);
+      localStorage.removeItem(REFRESH_TOKEN);
+    }
+  } catch (error) {
+    console.log("failed to logout", error);
+  }
+};
+
+
+// const handleLogout = async () => {
+//   try {
+//     const Navigate = useNavigate;
+//     localStorage.clear() && <Navigate to="/login" />;
+//   } catch (error) {
+//     console.log("failed to logout");
+//   }
+// };
+
+
+// const handleLogout = async () => {
+//   try {
+//     const Navigate = useNavigate;
+//     localStorage.clear();
+//     return <Navigate to="/login" />;
+//   } catch (error) {
+//     console.log("failed to logout");
+//   }
+// };
+
 function HeaderMenu() {
   const navigate = useNavigate();
 
   return (
     <StyledHeaderMenu>
-      {/* <li>
-        <ButtonIcon>
-          <FaRegCircleUser />
-        </ButtonIcon>
-      </li>
-      <li>
-        <ButtonIcon>
-          <span>"Username"</span>
-        </ButtonIcon>
-      </li> */}
       <li>
         <ButtonIcon onClick={() => navigate("/settings")}>
-          {/* <IoSettingsOutline />&nbsp; */}
-          <FaRegUser />&nbsp;
-          {/* <span>Settings</span> */}
+          <FaRegUser />
+          &nbsp;
           <span>Profile</span>
         </ButtonIcon>
       </li>
       <li>
-        <ButtonIcon>
-          <MdOutlineLogout />&nbsp;
+        <ButtonIcon onClick={handleLogout}>
+          <MdOutlineLogout />
+          &nbsp;
           <span>Logout</span>
         </ButtonIcon>
       </li>
-      <li>{/* <Logout /> */}</li>
     </StyledHeaderMenu>
   );
 }
