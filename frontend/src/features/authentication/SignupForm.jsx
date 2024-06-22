@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import toast from "react-hot-toast";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -9,6 +9,7 @@ import Input from "../../ui/Input";
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import Title from "../../ui/Title";
+import SpinnerMini from "../../ui/SpinnerMini";
 
 const Styledul = styled.ul`
   text-align: center;
@@ -31,8 +32,6 @@ function SignupForm() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -55,17 +54,9 @@ function SignupForm() {
         formData
       );
       console.log("success", response.data);
-      setSuccessMessage("Registration Successfull");
+      toast.success("Registration successful");
     } catch (error) {
-      console.log("Error during registration!", error.response?.data);
-      if (error.response && error.response.data) {
-        Object.keys(error.response.data).forEach((field) => {
-          const errorMessages = error.response.data[field];
-          if (errorMessages && errorMessages.length > 0) {
-            setError(errorMessages[0]);
-          }
-        });
-      }
+      toast.error("Error during registration");
     } finally {
       setIsLoading(false);
     }
@@ -73,11 +64,9 @@ function SignupForm() {
 
   return (
     <>
-      {error && <p>{error}</p>}
-      {successMessage && <p>{successMessage}</p>}
       <Form>
         <Title>PFMS</Title>
-        <Heading as="h4">Create Account</Heading>
+        <Heading as="h4">Register</Heading>
         <FormRow label="Username" orientation="vertical">
           <Input
             type="text"
@@ -117,7 +106,7 @@ function SignupForm() {
             disabled={isLoading}
             onClick={handleSubmit}
           >
-            Sign Up
+            {!isLoading ? "Sign up" : <SpinnerMini />}
           </Button>
         </FormRow>
         <FormRow orientation="vertical">

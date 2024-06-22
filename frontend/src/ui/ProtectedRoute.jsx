@@ -3,6 +3,16 @@ import { jwtDecode } from "jwt-decode";
 import api from "../services/api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../utils/constants";
 import { useState, useEffect } from "react";
+import Spinner from "./Spinner";
+import styled from "styled-components";
+
+const FullPage = styled.div`
+  height: 100vh;
+  background-color: var(--color-grey-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 function ProtectedRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(null);
@@ -48,7 +58,11 @@ function ProtectedRoute({ children }) {
   };
 
   if (isAuthorized === null) {
-    return <div>Loading...</div>;
+    return (
+      <FullPage>
+        <Spinner />
+      </FullPage>
+    );
   }
 
   return isAuthorized ? children : <Navigate to="/login" />;

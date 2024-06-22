@@ -7,10 +7,11 @@ import Table from "../ui/Table";
 import TableHeader from "../ui/TableHeader";
 import TableRow from "../ui/TableRow";
 import TableCell from "../ui/TableCell";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NewReminderForm from "../features/reminders/NewReminderForm";
 import EditReminderForm from "../features/reminders/EditReminderForm";
 import Modal from "../ui/Modal";
+import axios from "axios";
 
 const SButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -19,16 +20,16 @@ const SButton = styled(Button)`
   }
 `;
 
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
+// const CButton = styled(Button)`
+//   background-color: var(--color-grey-1);
+//   color: var(--color-grey-7);
+//   border: 2px solid var(--color-grey-5);
 
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
-`;
+//   &:hover {
+//     background-color: var(--color-grey-3);
+//     border: 2px solid var(--color-grey-6);
+//   }
+// `;
 
 const data = [
   {
@@ -66,6 +67,30 @@ const data = [
 const columns = ["Name", "Description", "Date", "Actions"];
 
 function Reminders() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/reminders/",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
+        setItems(response.data);
+        console.log(items);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+
   const [showNewReminderModal, setShowNewReminderModal] = useState(false);
 
   const handleOpenNewReminderModal = () => setShowNewReminderModal(true);
@@ -97,7 +122,7 @@ function Reminders() {
               <TableCell>{row.date}</TableCell>
               <TableCell>
                 <SButton size="small" onClick={handleOpenEditModal}>
-                  Edit{" "}
+                  Edit
                 </SButton>
                 &nbsp;
                 <Button
@@ -119,9 +144,9 @@ function Reminders() {
         title="New Reminder"
         footer={
           <>
-            <CButton onClick={handleCloseNewReminderModal}>Cancel</CButton>
+            {/* <CButton onClick={handleCloseNewReminderModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <Button>Add Reminder</Button>&nbsp;&nbsp;&nbsp;
+            <Button>Add Reminder</Button>&nbsp;&nbsp;&nbsp; */}
           </>
         }
       >
@@ -134,9 +159,9 @@ function Reminders() {
         title="Edit Reminder Details"
         footer={
           <>
-            <CButton onClick={handleCloseEditModal}>Cancel</CButton>
+            {/* <CButton onClick={handleCloseEditModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton>Update Reminder</SButton>
+            <SButton>Update Reminder</SButton> */}
           </>
         }
       >
@@ -148,9 +173,9 @@ function Reminders() {
         title="Delete Reminder"
         footer={
           <>
-            <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
+            {/* <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <Button variation="danger">Delete</Button>
+            <Button variation="danger">Delete</Button> */}
           </>
         }
       >

@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/constants";
+import "react-toastify/dist/ReactToastify.css";
 
+import SpinnerMini from "../../ui/SpinnerMini";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -11,6 +13,7 @@ import Input from "../../ui/Input";
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import Title from "../../ui/Title";
+import toast from "react-hot-toast";
 
 const Styledul = styled.ul`
   text-align: center;
@@ -33,7 +36,7 @@ function LoginForm() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -57,22 +60,12 @@ function LoginForm() {
       );
       console.log("success", response.data);
       setSuccessMessage("Login Successfull");
+      toast.success("Successfully Logged in");
       localStorage.setItem(ACCESS_TOKEN, response.data.tokens.access);
       localStorage.setItem(REFRESH_TOKEN, response.data.tokens.refresh);
       navigate("/dashboard");
-      // localStorage.setItem("access", response.data.tokens.access);
-      // localStorage.setItem("refreshToken", response.data.tokens.refresh);
-      // navigate("/dashboard");
     } catch (error) {
-      console.log("Error during login!", error.response?.data);
-      if (error.response && error.response.data) {
-        Object.keys(error.response.data).forEach((field) => {
-          const errorMessages = error.response.data[field];
-          if (errorMessages && errorMessages.length > 0) {
-            setError(errorMessages[0]);
-          }
-        });
-      }
+      toast.error("Incorrect email or password");
     } finally {
       setIsLoading(false);
     }
@@ -80,8 +73,7 @@ function LoginForm() {
 
   return (
     <>
-      {error && <p>{error}</p>}
-      {successMessage && <p>{successMessage}</p>}
+      {successMessage}
       <Form>
         <Title>PFMS</Title>
         <Heading as="h4">Login to your account</Heading>
@@ -108,7 +100,7 @@ function LoginForm() {
             disabled={isLoading}
             onClick={handleSubmit}
           >
-            Login
+            {!isLoading ? "Login" : <SpinnerMini />}
           </Button>
         </FormRow>
         <FormRow orientation="vertical">

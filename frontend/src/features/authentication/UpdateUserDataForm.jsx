@@ -27,10 +27,6 @@ function UpdateUserDataForm() {
         <Input type="email" id="email" autoComplete="email" />
       </FormRow>
       <Shr />
-      <FormRow label="Full name">
-        <Input type="text" id="name" autoComplete="name" />
-      </FormRow>
-      <Shr />
       <FormRow label="Username">
         <Input type="username" id="username" autoComplete="username" />
       </FormRow>

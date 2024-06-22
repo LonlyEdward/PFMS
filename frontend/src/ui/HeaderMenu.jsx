@@ -4,6 +4,8 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { FaRegUser } from "react-icons/fa6";
+import toast from "react-hot-toast";
+// import { ACCESS_TOKEN } from "../utils/constants";
 // import axios from "axios";
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants";
 // import { Navigate } from "react-router-dom";
@@ -29,15 +31,14 @@ const StyledHeaderMenu = styled.ul`
 //   }
 // };
 
-
 function HeaderMenu() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      // const Navigate = useNavigate;
       localStorage.clear();
       navigate("/login");
+      toast.success("Successfully Logged out");
     } catch (error) {
       console.log("failed to logout");
     }

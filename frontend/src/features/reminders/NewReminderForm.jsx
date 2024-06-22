@@ -1,12 +1,13 @@
-// import { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-
-// import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-// import Heading from "../../ui/Heading";
 import Textarea from "../../ui/Textarea";
+import Button from "../../ui/Button";
+// import { ACCESS_TOKEN } from "../../utils/constants";
+
+// import axios from "axios";
 
 const Shr = styled.hr`
   border: 1px solid var(--color-grey-4);
@@ -15,22 +16,59 @@ const Shr = styled.hr`
 `;
 
 function NewReminderForm() {
-  // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
+  
 
-  function handleSubmit() {}
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    date: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // function handleSubmit() {}
 
   return (
-    <Form type="modal" onSubmit={handleSubmit}>
+    <Form type="modal">
       <FormRow label="Reminder name">
-        <Input />
+        <Input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
       </FormRow>
       <Shr />
       <FormRow label="Date">
-        <Input type="date" />
+        <Input
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+        />
       </FormRow>
       <Shr />
       <FormRow label="Description">
-        <Textarea />
+        <Textarea
+          name="date"
+          value={formData.description}
+          onChange={handleChange}
+        />
+      </FormRow>
+      <FormRow>
+        <Button
+        // size="large"
+        // type="submit"
+        // disabled={isLoading}
+        // onClick={handleSubmit}
+        >
+          Add Reminder
+        </Button>
       </FormRow>
     </Form>
   );
