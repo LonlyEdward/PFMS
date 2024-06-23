@@ -7,6 +7,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+import Row from "../../ui/Row";
 
 const CardButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -101,7 +102,7 @@ const accounts = [
   },
 ];
 
-const Card = ({ account }) => {
+function AccountsCards({ account }) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -110,7 +111,6 @@ const Card = ({ account }) => {
 
   const handleOpenDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
-
   return (
     <>
       <SCard>
@@ -171,8 +171,15 @@ const Card = ({ account }) => {
       >
         <p>Are you sure you want to proceed? This action cannot be undone.</p>
       </Modal>
+
+      <Row type="wrap">
+        {accounts.map((account, index) => (
+          //   <AccountsCards key={index} account={accounts} />
+          <div key={index} account={account}></div>
+        ))}
+      </Row>
     </>
   );
-};
+}
 
-export default Card;
+export default AccountsCards;

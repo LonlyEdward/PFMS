@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/constants";
-import "react-toastify/dist/ReactToastify.css";
-
 import SpinnerMini from "../../ui/SpinnerMini";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";

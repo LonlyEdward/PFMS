@@ -2,12 +2,20 @@ import styled from "styled-components";
 import Button from "../../ui/Button";
 import { useState } from "react";
 import Modal from "../../ui/Modal";
-import NewAccountForm from "./NewAccountForm";
-import NewTransferForm from "./NewTransferForm";
+import Form from "../../ui/Form";
+import FormRow from "../../ui/FormRow";
+import Input from "../../ui/Input";
+import Textarea from "../../ui/Textarea";
 
 const Sdiv = styled.div`
   display: flex;
   gap: 2rem;
+`;
+
+const Shr = styled.hr`
+  border: 1px solid var(--color-grey-4);
+  opacity: 0.3;
+  margin: 0.2rem;
 `;
 
 const CButton = styled(Button)`
@@ -50,7 +58,23 @@ function AccountsOperations() {
           </>
         }
       >
-        <NewAccountForm />
+        <Form type="modal">
+          <FormRow label="Account name">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Balance">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Account Type Drop down ------>">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Description">
+            <Textarea />
+          </FormRow>
+        </Form>
       </Modal>
       <Modal
         show={showTransferModal}
@@ -64,7 +88,26 @@ function AccountsOperations() {
           </>
         }
       >
-        <NewTransferForm />
+        <Form type="modal">
+          <FormRow label="Transfer name">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Amount">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="From Account Drop down ------>">
+            <Input />
+          </FormRow>
+          <FormRow label="To Account Drop down ------>">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Description">
+            <Textarea />
+          </FormRow>
+        </Form>
       </Modal>
     </>
   );

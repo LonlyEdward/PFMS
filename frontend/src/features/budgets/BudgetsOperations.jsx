@@ -1,9 +1,19 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
 import { useState } from "react";
-import NewBudgetForm from "../budgets/NewBudgetForm";
-import NewEntryForm from "../budgets/NewEntryForm";
+// import NewBudgetForm from "../budgets/NewBudgetForm";
+// import NewEntryForm from "../budgets/NewEntryForm";
 import Modal from "../../ui/Modal";
+import Form from "../../ui/Form";
+import FormRow from "../../ui/FormRow";
+import Input from "../../ui/Input";
+import Textarea from "../../ui/Textarea";
+
+const Shr = styled.hr`
+  border: 1px solid var(--color-grey-4);
+  opacity: 0.3;
+  margin: 0.2rem;
+`;
 
 const Sdiv = styled.div`
   display: flex;
@@ -23,14 +33,10 @@ const CButton = styled(Button)`
 
 function BudgetsOperations() {
   const [showNewBudgetModal, setShowNewBudgetModal] = useState(false);
-  // const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
 
   const handleOpenNewBudgetModal = () => setShowNewBudgetModal(true);
   const handleCloseNewBudgetModal = () => setShowNewBudgetModal(false);
-
-  // const handleOpenBudgetModal = () => setShowBudgetModal(true);
-  // const handleCloseBudgetModal = () => setShowBudgetModal(false);
 
   const handleOpenNewEntryModal = () => setShowNewEntryModal(true);
   const handleCloseNewEntryModal = () => setShowNewEntryModal(false);
@@ -54,7 +60,27 @@ function BudgetsOperations() {
           </>
         }
       >
-        <NewBudgetForm />
+        <Form type="modal">
+          <FormRow label="Budget name">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Amount">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Start Date">
+            <Input type="date" />
+          </FormRow>
+          <Shr />
+          <FormRow label="End Date">
+            <Input type="date" />
+          </FormRow>
+          <Shr />
+          <FormRow label="Description">
+            <Textarea />
+          </FormRow>
+        </Form>
       </Modal>
       <Modal
         show={showNewEntryModal}
@@ -68,7 +94,19 @@ function BudgetsOperations() {
           </>
         }
       >
-        <NewEntryForm />
+        <Form type="modal">
+          <FormRow label="Entry name">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Amount">
+            <Input />
+          </FormRow>
+          <Shr />
+          <FormRow label="Which Budget Drop down ------>">
+            <Input />
+          </FormRow>
+        </Form>
       </Modal>
     </>
   );
