@@ -1,8 +1,8 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import AccountsOperations from "../features/accounts/AccountsOperations";
-import AccountsCards from "../features/accounts/AccountsCards";
-// import Card from "../features/accounts/Card";
+// import AccountsCards from "../features/accounts/AccountsCards";/
+import Card from "../features/accounts/Card";
 import React from "react";
 // import { useState } from "react";
 
@@ -53,7 +53,7 @@ function Accounts() {
         <AccountsOperations />
       </Row>
 
-      <AccountsCards />
+      <Card />
     </>
   );
 }

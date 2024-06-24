@@ -7,6 +7,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+// import Row from "../../ui/Row";
 
 const CardButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -171,6 +172,13 @@ const Card = ({ account }) => {
       >
         <p>Are you sure you want to proceed? This action cannot be undone.</p>
       </Modal>
+
+      {/* <Row type="wrap">
+        {accounts.map((account, index) => (
+          //   <AccountsCards key={index} account={accounts} />
+          <Card key={index} account={account} />
+        ))}
+      </Row> */}
     </>
   );
 };

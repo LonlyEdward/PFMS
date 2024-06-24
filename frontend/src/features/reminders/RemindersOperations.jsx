@@ -9,6 +9,7 @@ import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const CButton = styled(Button)`
   background-color: var(--color-grey-1);
@@ -28,6 +29,15 @@ const Shr = styled.hr`
 `;
 
 function RemindersOperations() {
+  // const token = localStorage.getItem("access");
+  // try {
+  //   const decodedId = jwtDecode(token);
+  //   const userId = decodedId.user_id;
+  //   console.log(userId);
+  // } catch (err) {
+  //   console.error("Invalid token", err.message);
+  // }
+
   const [formData, setFormData] = useState({
     name: "",
     date: "",
@@ -37,11 +47,51 @@ function RemindersOperations() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
+      // customuser = userId,
       [e.target.name]: e.target.value,
     });
   };
 
+  // const handleSubmit = async (e) => {
+  //   // const token = localStorage.getItem("access");
+  //   e.preventDefault();
+  //   if (isLoading) {
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://127.0.0.1:8000/api/reminders/",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           withCredentials: true,
+  //           // credentials: true,
+  //           Authorization: `Bearer ${localStorage.getItem("access")}`,
+  //           // Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log("success", response.data);
+  //     //   setSuccessMessage("Login Successfull");
+  //     toast.success("Reminder added successfully");
+  //   } catch (error) {
+  //     toast.error("Error adding reminder");
+  //     console.log(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
+    const token = localStorage.getItem("access");
+    const decodedId = jwtDecode(token);
+    const userId = decodedId.user_id;
+    console.log(userId);
+    // const token = localStorage.getItem("access");
     e.preventDefault();
     if (isLoading) {
       return;
@@ -50,18 +100,22 @@ function RemindersOperations() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/reminders/",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        }
-      );
-      console.log("success", response.data);
-      //   setSuccessMessage("Login Successfull");
-      toast.success("Reminder added successfully");
+      await axios({
+        method: "post",
+        url: `http://127.0.0.1:8000/api/reminders/`,
+        withCredentials: true,
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }).then((response) => {
+        console.log(response.data);
+        toast.success("added successfully");
+      });
+      // // console.log("success", response.data);
+      // //   setSuccessMessage("Login Successfull");
+      // toast.success("Reminder added successfully");
     } catch (error) {
       toast.error("Error adding reminder");
       console.log(error);
@@ -69,6 +123,30 @@ function RemindersOperations() {
       setIsLoading(false);
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   // const token = localStorage.getItem("access");
+  //   e.preventDefault();
+  //   if (isLoading) {
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   await axios({
+  //     method: "post",
+  //     url: "http://127.0.0.1:8000/api/reminders/",
+  //     withCredentials: true,
+  //     data: formData,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("access")}`,
+  //       },
+  //   }).then((response) => {
+  //     console.log(response.data);
+  //     toast.success("added successfully");
+  //   });
+  // };
 
   const [isLoading, setIsLoading] = useState(false);
   const [showNewReminderModal, setShowNewReminderModal] = useState(false);

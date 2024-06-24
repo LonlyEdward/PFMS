@@ -10,6 +10,7 @@ const HeaderCell = styled.th`
   text-align: center;
   color: var(--color-grey-3);
   background-color: var(--secondary-color-30);
+  border-right: 1px solid var(--color-grey-5);
 `;
 
 const TableHeader = ({ columns }) => {

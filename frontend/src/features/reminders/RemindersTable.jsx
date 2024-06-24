@@ -5,13 +5,15 @@ import TableCell from "../../ui/TableCell";
 import Modal from "../../ui/Modal";
 import Button from "../../ui/Button";
 import styled from "styled-components";
-import { useState } from "react";
-// import axios from "axios";
+import { useState, useEffect } from "react";
+import axios from "axios";
 // import toast from "react-hot-toast";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+
+// import { useCallback } from "react";
 
 const Shr = styled.hr`
   border: 1px solid var(--color-grey-4);
@@ -37,39 +39,6 @@ const CButton = styled(Button)`
   }
 `;
 
-const data = [
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: "2025-04-25",
-  },
-];
-
 const columns = ["Name", "Description", "Date", "Actions"];
 
 function RemindersTable() {
@@ -81,7 +50,6 @@ function RemindersTable() {
 
   const handleOpenDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
-
 
   //   const [items, setItems] = useState([]);
   //
@@ -106,16 +74,52 @@ function RemindersTable() {
   //     fetchItems();
   //   }, [items]);
 
+  // const [reminders, setReminders] = useState([]);
+
+  // useEffect(() => {
+  //   getReminders();
+  // }, []);
+
+  // const getReminders = async () => {
+  //   try {
+  // const response = await axios.get("http://127.0.0.1:8000/api/reminders/", {
+  //   headers: {
+  //     Authorization: `Bearer ${localStorage.getItem("access")}`,
+  //   },
+  // });
+  //     setReminders(response.data);
+  //     console.log(reminders);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  const [reminders, setReminders] = useState([]);
+
+  const getReminders = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/reminders", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    console.log(response.data);
+    setReminders(response.data);
+  };
+
+  useEffect(() => {
+    getReminders();
+  }, []);
+
   return (
     <>
       <Table>
         <TableHeader columns={columns} />
         <tbody>
-          {data.map((row, index) => (
+          {reminders.map((reminder, index) => (
             <TableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.description}</TableCell>
-              <TableCell>{row.date}</TableCell>
+              <TableCell>{reminder.name}</TableCell>
+              <TableCell>{reminder.description}</TableCell>
+              <TableCell>{reminder.date}</TableCell>
               <TableCell>
                 <SButton size="small" onClick={handleOpenEditModal}>
                   Edit
