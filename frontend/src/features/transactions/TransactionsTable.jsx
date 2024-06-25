@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "../../ui/Table";
 import TableHeader from "../../ui/TableHeader";
 import TableRow from "../../ui/TableRow";
@@ -10,6 +10,7 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import Button from "../../ui/Button";
+import axios from "axios";
 
 const SButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -35,51 +36,6 @@ const Shr = styled.hr`
   margin: 0.2rem;
 `;
 
-const data = [
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Expense",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Income",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Expense",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Income",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Expense",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date: "2025-04-25",
-    transaction_type: "Income",
-  },
-];
-
 const columns = [
   "Name",
   "Description",
@@ -90,7 +46,6 @@ const columns = [
 ];
 
 function TransactionsTable() {
-
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -99,18 +54,38 @@ function TransactionsTable() {
 
   const handleOpenDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
+  const [transactions, setTransactions] = useState([]);
+
+  const getTransactions = async () => {
+    const response = await axios.get(
+      "http://127.0.0.1:8000/api/transactions/",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }
+    );
+    console.log(response.data);
+    setTransactions(response.data);
+  };
+
+  useEffect(() => {
+    getTransactions();
+  }, []);
+
   return (
     <>
       <Table>
         <TableHeader columns={columns} />
         <tbody>
-          {data.map((row, index) => (
+          {transactions.map((transaction, index) => (
             <TableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.description}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.transaction_type}</TableCell>
+              <TableCell>{transaction.name}</TableCell>
+              <TableCell>{transaction.description}</TableCell>
+              <TableCell>{transaction.amount}</TableCell>
+              <TableCell>{transaction.date}</TableCell>
+              <TableCell>{transaction.transactiontype}</TableCell>
               <TableCell>
                 <SButton size="small" onClick={handleOpenEditModal}>
                   Edit
@@ -128,8 +103,6 @@ function TransactionsTable() {
           ))}
         </tbody>
       </Table>
-
-
 
       <Modal
         show={showEditModal}

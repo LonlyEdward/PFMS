@@ -1,6 +1,6 @@
 import Button from "../../ui/Button";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "../../ui/Table";
 import TableHeader from "../../ui/TableHeader";
 import TableRow from "../../ui/TableRow";
@@ -10,6 +10,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+import axios from "axios";
 
 const SButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -35,64 +36,6 @@ const Shr = styled.hr`
   margin: 0.2rem;
 `;
 
-const data = [
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-  {
-    name: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    amount: 1000000,
-    date_created: "2025-04-25",
-    start_date: "2025-04-25",
-    end_date: "2025-04-25",
-  },
-];
 
 const columns = [
   "Name",
@@ -118,51 +61,35 @@ function BudgetsTable() {
   const handleOpenBudgetModal = () => setShowBudgetModal(true);
   const handleCloseBudgetModal = () => setShowBudgetModal(false);
 
+  const [budgets, setBudgets] = useState([]);
+
+  const getBudgets = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/budgets", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    console.log(response.data);
+    setBudgets(response.data);
+  };
+
+  useEffect(() => {
+    getBudgets();
+  }, []);
+
   return (
     <>
       <Table>
         <TableHeader columns={columns} />
         <tbody>
-          {data.map((row, index) => (
+          {budgets.map((budget, index) => (
             <TableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.description}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell>{row.date_created}</TableCell>
-              <TableCell>{row.start_date}</TableCell>
-              <TableCell>{row.end_date}</TableCell>
-              <TableCell>
-                <SButton size="small" onClick={handleOpenEditModal}>
-                  Edit{" "}
-                </SButton>
-                &nbsp;
-                <SButton size="small" onClick={handleOpenBudgetModal}>
-                  View
-                </SButton>
-                &nbsp;
-                <Button
-                  size="small"
-                  variation="danger"
-                  onClick={handleOpenDeleteModal}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </tbody>
-      </Table>
-      <Table>
-        <TableHeader columns={columns} />
-        <tbody>
-          {data.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.description}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell>{row.date_created}</TableCell>
-              <TableCell>{row.start_date}</TableCell>
-              <TableCell>{row.end_date}</TableCell>
+              <TableCell>{budget.name}</TableCell>
+              <TableCell>{budget.description}</TableCell>
+              <TableCell>{budget.amount}</TableCell>
+              <TableCell>{budget.date_created}</TableCell>
+              <TableCell>{budget.start_date}</TableCell>
+              <TableCell>{budget.end_date}</TableCell>
               <TableCell>
                 <SButton size="small" onClick={handleOpenEditModal}>
                   Edit{" "}

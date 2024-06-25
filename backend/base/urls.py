@@ -6,14 +6,14 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 
 router = DefaultRouter()
-router.register(r'budgets', BudgetViewSet)
-router.register(r'budgetentries', BudgetEntryViewSet)
-router.register(r'reminders', ReminderViewSet)
-router.register(r'transactions', TransactionViewSet)
+router.register(r'budgets', BudgetViewSet, basename='budget')
+router.register(r'budgetentries', BudgetEntryViewSet, basename='budgetentry')
+router.register(r'reminders', ReminderViewSet, basename='reminder')
+router.register(r'transactions', TransactionViewSet, basename='transaction')
 router.register(r'accounttype', AccountTypeViewSet)
-router.register(r'accounts', AccountViewSet)
+router.register(r'accounts', AccountViewSet, basename='account')
 router.register(r'transactiontype', TransactionTypeViewSet)
-router.register(r'transfers', TransferViewSet)
+router.register(r'transfers', TransferViewSet, basename='transfer')
 
 urlpatterns = [
     path('', include(router.urls)),

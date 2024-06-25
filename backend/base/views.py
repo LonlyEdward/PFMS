@@ -59,38 +59,50 @@ class UserLogoutAPIView(GenericAPIView):
 
 class ReminderViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Reminder.objects.all()
     serializer_class = ReminderSerializer
+
+    def get_queryset(self):
+        return Reminder.objects.filter(customuser=self.request.user)
 
 
 class BudgetViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Budget.objects.all()
     serializer_class = BudgetSerializer
+
+    def get_queryset(self):
+        return Budget.objects.filter(customuser=self.request.user)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Account.objects.all()
     serializer_class = AccountSerializer
+
+    def get_queryset(self):
+        return Account.objects.filter(customuser=self.request.user)
 
 
 class TransferViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
+
+    def get_queryset(self):
+        return Transfer.objects.filter(customuser=self.request.user)
 
 
 class BudgetEntryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = BudgetEntry.objects.all()
     serializer_class = BudgetEntrySerializer
+
+    def get_queryset(self):
+        return BudgetEntry.objects.filter(customuser=self.request.user)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        return Transaction.objects.filter(customuser=self.request.user)
 
 
 class TransactionTypeViewSet(ReadOnlyModelViewSet):

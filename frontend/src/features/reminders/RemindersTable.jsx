@@ -13,8 +13,6 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 
-// import { useCallback } from "react";
-
 const Shr = styled.hr`
   border: 1px solid var(--color-grey-4);
   opacity: 0.3;
@@ -51,48 +49,6 @@ function RemindersTable() {
   const handleOpenDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
-  //   const [items, setItems] = useState([]);
-  //
-  //   useEffect(() => {
-  //     const fetchItems = async () => {
-  //       try {
-  //         const response = await axios.get(
-  //           "http://127.0.0.1:8000/api/reminders/",
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${localStorage.getItem("access")}`,
-  //             },
-  //           }
-  //         );
-  //         setItems(response.data);
-  //         console.log(items);
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
-
-  //     fetchItems();
-  //   }, [items]);
-
-  // const [reminders, setReminders] = useState([]);
-
-  // useEffect(() => {
-  //   getReminders();
-  // }, []);
-
-  // const getReminders = async () => {
-  //   try {
-  // const response = await axios.get("http://127.0.0.1:8000/api/reminders/", {
-  //   headers: {
-  //     Authorization: `Bearer ${localStorage.getItem("access")}`,
-  //   },
-  // });
-  //     setReminders(response.data);
-  //     console.log(reminders);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
 
   const [reminders, setReminders] = useState([]);
 
