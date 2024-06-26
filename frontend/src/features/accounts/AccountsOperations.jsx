@@ -1,32 +1,20 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../../ui/Modal";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+import Line from "../../ui/Line";
+import CancelButton from "../../ui/CancelButton";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Select from "../../ui/Select";
 
 const Sdiv = styled.div`
   display: flex;
   gap: 2rem;
-`;
-
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
-
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
-
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
 `;
 
 function AccountsOperations() {
@@ -38,6 +26,68 @@ function AccountsOperations() {
 
   const handleOpenTransferModal = () => setShowTransferModal(true);
   const handleCloseTransferModal = () => setShowTransferModal(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [options, setOptions] = useState([]);
+
+  const getAccounttypes = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/accounttype/", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    console.log(response.data);
+    setOptions(response.data);
+  };
+
+  useEffect(() => {
+    getAccounttypes();
+  }, []);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    balance: "",
+    accounttype: "",
+    description: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await axios({
+        method: "post",
+        url: `http://127.0.0.1:8000/api/accounts/`,
+        withCredentials: true,
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }).then((response) => {
+        console.log(response.data);
+        toast.success("Account added successfully");
+        handleCloseAccountModal();
+      });
+    } catch (error) {
+      toast.error("Error adding Account");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -52,27 +102,55 @@ function AccountsOperations() {
         title="Add New Account"
         footer={
           <>
-            <CButton onClick={handleCloseAccountModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseAccountModal}>
+              Cancel
+            </CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <Button>Add Account</Button>&nbsp;&nbsp;&nbsp;
+            <Button onClick={handleSubmit}>Add Account</Button>
+            &nbsp;&nbsp;&nbsp;
           </>
         }
       >
         <Form type="modal">
           <FormRow label="Account name">
-            <Input />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Balance">
-            <Input />
+            <Input
+              type="number"
+              name="balance"
+              value={formData.balance}
+              onChange={handleChange}
+            />
           </FormRow>
-          <Shr />
-          <FormRow label="Account Type Drop down ------>">
-            <Input />
+          <Line />
+          <FormRow label="Account Type">
+            <Select
+              name="accounttype"
+              value={formData.accounttype}
+              onChange={handleChange}
+            >
+              <option value="">--Select an option--</option>
+              {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
-            <Textarea />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </FormRow>
         </Form>
       </Modal>
@@ -82,7 +160,9 @@ function AccountsOperations() {
         title="New Transfer"
         footer={
           <>
-            <CButton onClick={handleCloseTransferModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseTransferModal}>
+              Cancel
+            </CancelButton>
             &nbsp;&nbsp;&nbsp;
             <Button>Confirm Transfer</Button>
           </>
@@ -92,18 +172,18 @@ function AccountsOperations() {
           <FormRow label="Transfer name">
             <Input />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Amount">
             <Input />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="From Account Drop down ------>">
             <Input />
           </FormRow>
           <FormRow label="To Account Drop down ------>">
             <Input />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
             <Textarea />
           </FormRow>

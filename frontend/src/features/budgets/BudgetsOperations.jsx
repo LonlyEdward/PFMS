@@ -46,7 +46,6 @@ function BudgetsOperations() {
     name: "",
     description: "",
     amount: "",
-    // date_created: "",
     start_date: "",
     end_date: "",
   });

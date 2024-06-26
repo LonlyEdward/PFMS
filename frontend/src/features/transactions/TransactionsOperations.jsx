@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import Modal from "../../ui/Modal";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -9,13 +8,9 @@ import Button from "../../ui/Button";
 import Select from "../../ui/Select";
 import axios from "axios";
 import CancelButton from "../../ui/CancelButton";
+import Line from "../../ui/Line";
 import toast from "react-hot-toast";
 
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
 
 function TransactionsOperations() {
   const [options, setOptions] = useState([]);
@@ -78,12 +73,11 @@ function TransactionsOperations() {
         },
       }).then((response) => {
         console.log(response.data);
-        toast.success("Reminder added successfully");
+        toast.success("Transaction added successfully");
         handleCloseNewTransactionModal();
       });
-      // navigate("/");
     } catch (error) {
-      toast.error("Error adding reminder");
+      toast.error("Error adding Transaction");
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -117,7 +111,7 @@ function TransactionsOperations() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Amount">
             <Input
               type="number"
@@ -126,7 +120,7 @@ function TransactionsOperations() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Transaction Type">
             <Select
               name="transactiontype"
@@ -141,7 +135,7 @@ function TransactionsOperations() {
               ))}
             </Select>
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
             <Textarea
               name="description"

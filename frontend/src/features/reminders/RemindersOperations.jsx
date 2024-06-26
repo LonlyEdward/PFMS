@@ -1,7 +1,8 @@
 import Button from "../../ui/Button";
 import { useState } from "react";
 import Modal from "../../ui/Modal";
-import styled from "styled-components";
+import CancelButton from "../../ui/CancelButton";
+import Line from "../../ui/Line";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
@@ -10,22 +11,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
-
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
-`;
-
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
 
 function RemindersOperations() {
   const navigate = useNavigate();
@@ -89,7 +74,7 @@ function RemindersOperations() {
         title="New Reminder"
         footer={
           <>
-            <CButton onClick={handleCloseNewReminderModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseNewReminderModal}>Cancel</CancelButton>
             &nbsp;&nbsp;&nbsp;
             <Button onClick={handleSubmit}>Add Reminder</Button>
           </>
@@ -104,7 +89,7 @@ function RemindersOperations() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Date">
             <Input
               type="date"
@@ -113,7 +98,7 @@ function RemindersOperations() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
             <Textarea
               name="description"

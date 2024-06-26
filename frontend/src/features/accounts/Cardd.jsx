@@ -7,7 +7,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
-// import Row from "../../ui/Row";
+import Row from "../../ui/Row";
 
 const CardButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -102,7 +102,7 @@ const accounts = [
   },
 ];
 
-const Card = ({ account }) => {
+const Cardd = ({ account }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -115,10 +115,10 @@ const Card = ({ account }) => {
   return (
     <>
       <SCard>
-        <CardTitle>{accounts.name}</CardTitle>
-        <CardBalance>Balance: ${accounts.balance}</CardBalance>
-        <CardDetail>Description: {accounts.description}</CardDetail>
-        <CardDetail>Account Type: {accounts.type}</CardDetail>
+        <CardTitle>{account.name}</CardTitle>
+        <CardBalance>Balance: ${account.balance}</CardBalance>
+        <CardDetail>Description: {account.description}</CardDetail>
+        <CardDetail>Account Type: {account.type}</CardDetail>
         <CardButton size="small" onClick={handleOpenEditModal}>
           Edit
         </CardButton>
@@ -173,14 +173,14 @@ const Card = ({ account }) => {
         <p>Are you sure you want to proceed? This action cannot be undone.</p>
       </Modal>
 
-      {/* <Row type="wrap">
+      <Row type="wrap">
         {accounts.map((account, index) => (
-          //   <AccountsCards key={index} account={accounts} />
-          <Card key={index} account={account} />
+          // <AccountsCards key={index} account={accounts} />
+          <Cardd key={index} account={account} />
         ))}
-      </Row> */}
+      </Row>
     </>
   );
 };
 
-export default Card;
+export default Cardd;

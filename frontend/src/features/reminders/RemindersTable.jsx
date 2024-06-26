@@ -4,7 +4,6 @@ import TableRow from "../../ui/TableRow";
 import TableCell from "../../ui/TableCell";
 import Modal from "../../ui/Modal";
 import Button from "../../ui/Button";
-import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -12,37 +11,15 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
-
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
-
-const SButton = styled(Button)`
-  background-color: var(--primary-color-10);
-  &:hover {
-    background-color: var(--primary-color-30);
-  }
-`;
-
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
-
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
-`;
-
-const columns = ["Name", "Description", "Date", "Actions"];
+import BlueButton from "../../ui/BlueButton";
+import Line from "../../ui/Line";
+import CancelButton from "../../ui/CancelButton";
 
 function RemindersTable() {
+  const columns = ["Name", "Description", "Date", "Actions"];
+
   const [selectedReminderId, setSelectedReminderId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-
 
   const handleOpenEditModal = (reminder) => {
     setSelectedReminderId(reminder.id);
@@ -82,7 +59,6 @@ function RemindersTable() {
     getReminders();
   };
 
-
   const [formData, setFormData] = useState({
     name: "",
     date: "",
@@ -117,7 +93,6 @@ function RemindersTable() {
     }
   };
 
-
   return (
     <>
       <Table>
@@ -129,9 +104,12 @@ function RemindersTable() {
               <TableCell>{reminder.description}</TableCell>
               <TableCell>{reminder.date}</TableCell>
               <TableCell>
-                <SButton size="small" onClick={() => handleOpenEditModal(reminder)}>
+                <BlueButton
+                  size="small"
+                  onClick={() => handleOpenEditModal(reminder)}
+                >
                   Edit
-                </SButton>
+                </BlueButton>
                 &nbsp;
                 <Button
                   size="small"
@@ -152,9 +130,9 @@ function RemindersTable() {
         title="Edit Reminder Details"
         footer={
           <>
-            <CButton onClick={handleCloseEditModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseEditModal}>Cancel</CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton onClick={handleUpdate}>Update Reminder</SButton>
+            <BlueButton onClick={handleUpdate}>Update Reminder</BlueButton>
           </>
         }
       >
@@ -167,7 +145,7 @@ function RemindersTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Date">
             <Input
               type="date"
@@ -176,7 +154,7 @@ function RemindersTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
             <Textarea
               name="description"

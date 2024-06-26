@@ -2,8 +2,9 @@ import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import AccountsOperations from "../features/accounts/AccountsOperations";
 // import AccountsCards from "../features/accounts/AccountsCards";/
-import Card from "../features/accounts/Card";
+// import Card from "../features/accounts/Card";
 import React from "react";
+import AccountsList from "../features/accounts/AccountsList";
 // import { useState } from "react";
 
 // const accounts = [
@@ -53,7 +54,7 @@ function Accounts() {
         <AccountsOperations />
       </Row>
 
-      <Card />
+      <AccountsList />
     </>
   );
 }

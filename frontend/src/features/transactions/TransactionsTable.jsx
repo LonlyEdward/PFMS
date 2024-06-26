@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useState, useEffect } from "react";
 import Table from "../../ui/Table";
 import TableHeader from "../../ui/TableHeader";
@@ -11,49 +10,39 @@ import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import Button from "../../ui/Button";
 import axios from "axios";
-
-const SButton = styled(Button)`
-  background-color: var(--primary-color-10);
-  &:hover {
-    background-color: var(--primary-color-30);
-  }
-`;
-
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
-
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
-`;
-
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
-
-const columns = [
-  "Name",
-  "Description",
-  "Amount",
-  "Date",
-  "Transaction Type",
-  "Actions",
-];
+import BlueButton from "../../ui/BlueButton";
+import Line from "../../ui/Line";
+import CancelButton from "../../ui/CancelButton";
+import toast from "react-hot-toast";
+import Select from "../../ui/Select";
 
 function TransactionsTable() {
+  const columns = [
+    "Name",
+    "Description",
+    "Amount",
+    "Date",
+    "Transaction Type",
+    "Actions",
+  ];
+
+  // const handleOpenEditModal = () => setShowEditModal(true);
+
+  const [selectedTransactionId, setSelectedTransactionId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleOpenEditModal = () => setShowEditModal(true);
+  const handleOpenEditModal = (transaction) => {
+    setSelectedTransactionId(transaction.id);
+    setFormData({
+      name: transaction.name,
+      amount: transaction.amount,
+      description: transaction.description,
+      transactiontype: transaction.transactiontype,
+    });
+    setShowEditModal(true);
+  };
+
   const handleCloseEditModal = () => setShowEditModal(false);
-
-  const handleOpenDeleteModal = () => setShowDeleteModal(true);
-  const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const [transactions, setTransactions] = useState([]);
 
@@ -74,6 +63,71 @@ function TransactionsTable() {
     getTransactions();
   }, []);
 
+  const deleteTransaction = async (id) => {
+    await axios.delete(`http://127.0.0.1:8000/api/transactions/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    toast.success("Transaction deleted successfully");
+    getTransactions();
+  };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    amount: "",
+    description: "",
+    transactiontype: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/transactions/${selectedTransactionId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      toast.success("Transaction updated successfully");
+      setShowEditModal(false);
+      getTransactions();
+    } catch (error) {
+      console.error("There was an error updating the item!", error);
+      toast.error("Failed to update the Transaction");
+    }
+  };
+
+  const [options, setOptions] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+
+  const getTransactiontypes = async () => {
+    const response = await axios.get(
+      "http://127.0.0.1:8000/api/transactiontype/",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }
+    );
+    console.log(response.data);
+    setOptions(response.data);
+  };
+
+  useEffect(() => {
+    getTransactiontypes();
+  }, []);
+
   return (
     <>
       <Table>
@@ -87,14 +141,17 @@ function TransactionsTable() {
               <TableCell>{transaction.date}</TableCell>
               <TableCell>{transaction.transactiontype}</TableCell>
               <TableCell>
-                <SButton size="small" onClick={handleOpenEditModal}>
+                <BlueButton
+                  size="small"
+                  onClick={() => handleOpenEditModal(transaction)}
+                >
                   Edit
-                </SButton>
+                </BlueButton>
                 &nbsp;
                 <Button
                   size="small"
                   variation="danger"
-                  onClick={handleOpenDeleteModal}
+                  onClick={() => deleteTransaction(transaction.id)}
                 >
                   Delete
                 </Button>
@@ -110,43 +167,54 @@ function TransactionsTable() {
         title="Edit Transaction Details"
         footer={
           <>
-            <CButton onClick={handleCloseEditModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseEditModal}>Cancel</CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton>Update Transaction</SButton>
+            <BlueButton onClick={handleUpdate}>Update Transaction</BlueButton>
           </>
         }
       >
         <Form type="modal">
           <FormRow label="Transaction name">
-            <Input />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Amount">
-            <Input />
+            <Input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+            />
           </FormRow>
-          <Shr />
-          <FormRow label="Transaction Type Drop down ------>">
-            <Input />
+          <Line />
+          <FormRow label="Transaction Type">
+            <Select
+              name="transactiontype"
+              value={formData.transactiontype}
+              onChange={handleChange}
+            >
+              <option value="">--Select an option--</option>
+              {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
-            <Textarea />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </FormRow>
         </Form>
-      </Modal>
-      <Modal
-        show={showDeleteModal}
-        handleClose={handleCloseDeleteModal}
-        title="Delete Transaction"
-        footer={
-          <>
-            <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
-            &nbsp;&nbsp;&nbsp;
-            <Button variation="danger">Delete</Button>
-          </>
-        }
-      >
-        <p>Are you sure you want to proceed? This action cannot be undone.</p>
       </Modal>
     </>
   );
