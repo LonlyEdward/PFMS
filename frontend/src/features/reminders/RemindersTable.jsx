@@ -42,9 +42,8 @@ const columns = ["Name", "Description", "Date", "Actions"];
 function RemindersTable() {
   const [selectedReminderId, setSelectedReminderId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  // const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // const handleOpenEditModal = () => setShowEditModal(true);
+
   const handleOpenEditModal = (reminder) => {
     setSelectedReminderId(reminder.id);
     setFormData({
@@ -56,9 +55,6 @@ function RemindersTable() {
   };
 
   const handleCloseEditModal = () => setShowEditModal(false);
-
-  // const handleOpenDeleteModal = () => setShowDeleteModal(true);
-  // const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const [reminders, setReminders] = useState([]);
 
@@ -86,9 +82,7 @@ function RemindersTable() {
     getReminders();
   };
 
-  //-----------------
 
-  // const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     date: "",
@@ -102,23 +96,6 @@ function RemindersTable() {
     });
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     const response = await axios.put(
-  //       `http://127.0.0.1:8000/api/reminders/${reminders.data}/`,
-  //       {
-  //         headers: {
-  //           withCredentials: true,
-  //           Authorization: `Bearer ${localStorage.getItem("access")}`,
-  //         },
-  //       }
-  //     );
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error("There was an error updating the item!", error);
-  //   }
-  // };
-
   const handleUpdate = async () => {
     try {
       const response = await axios.put(
@@ -126,7 +103,6 @@ function RemindersTable() {
         formData,
         {
           headers: {
-            // withCredentials: true,
             Authorization: `Bearer ${localStorage.getItem("access")}`,
           },
         }
@@ -141,7 +117,6 @@ function RemindersTable() {
     }
   };
 
-  //---------------
 
   return (
     <>
@@ -154,7 +129,6 @@ function RemindersTable() {
               <TableCell>{reminder.description}</TableCell>
               <TableCell>{reminder.date}</TableCell>
               <TableCell>
-                {/* <SButton size="small" onClick={handleOpenEditModal(reminder)}> */}
                 <SButton size="small" onClick={() => handleOpenEditModal(reminder)}>
                   Edit
                 </SButton>
@@ -162,7 +136,6 @@ function RemindersTable() {
                 <Button
                   size="small"
                   variation="danger"
-                  // onClick={handleOpenDeleteModal}
                   onClick={() => deleteReminder(reminder.id)}
                 >
                   Delete
@@ -213,26 +186,6 @@ function RemindersTable() {
           </FormRow>
         </Form>
       </Modal>
-
-      {/* <Modal
-        show={showDeleteModal}
-        handleClose={handleCloseDeleteModal}
-        title="Delete Reminder"
-        footer={
-          <>
-            <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
-            &nbsp;&nbsp;&nbsp;
-            <Button
-              variation="danger"
-              onClick={() => deleteReminder(reminders.id)}
-            >
-              Delete
-            </Button>
-          </>
-        }
-      >
-        <p>Are you sure you want to proceed? This action cannot be undone.</p>
-      </Modal> */}
     </>
   );
 }

@@ -56,12 +56,14 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = '__all__'
+        read_only_fields = ['customuser']
 
 
 class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
         fields = '__all__'
+        read_only_fields = ['customuser']
 
 
 class TransactionTypeSerializer(serializers.ModelSerializer):
@@ -74,12 +76,14 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
+        read_only_fields = ['customuser']
 
 
 class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
         fields = '__all__'
+        read_only_fields = ['customuser']
 
 
 class BudgetEntrySerializer(serializers.ModelSerializer):

@@ -75,6 +75,9 @@ class BudgetViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Budget.objects.filter(customuser=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(customuser=self.request.user)
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -82,6 +85,9 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Account.objects.filter(customuser=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(customuser=self.request.user)
 
 
 class TransferViewSet(viewsets.ModelViewSet):
@@ -91,6 +97,9 @@ class TransferViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Transfer.objects.filter(customuser=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(customuser=self.request.user)
+
 
 class BudgetEntryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -98,6 +107,7 @@ class BudgetEntryViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return BudgetEntry.objects.filter(customuser=self.request.user)
+    # edit this so that a user can have a budget entry but they will be retrieved based on the id of the budget
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -107,11 +117,18 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Transaction.objects.filter(customuser=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(customuser=self.request.user)
+
 
 class TransactionTypeViewSet(ReadOnlyModelViewSet):
+# class TransactionTypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = TransactionType.objects.all()
     serializer_class = TransactionTypeSerializer
+
+    # def get_queryset(self):
+    #     return Reminder.objects.filter(customuser=self.request.user)
 
 
 class AccountTypeViewSet(ReadOnlyModelViewSet):

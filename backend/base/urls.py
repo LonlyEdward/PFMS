@@ -12,7 +12,8 @@ router.register(r'reminders', ReminderViewSet, basename='reminder')
 router.register(r'transactions', TransactionViewSet, basename='transaction')
 router.register(r'accounttype', AccountTypeViewSet)
 router.register(r'accounts', AccountViewSet, basename='account')
-router.register(r'transactiontype', TransactionTypeViewSet)
+router.register(r'transactiontype', TransactionTypeViewSet,
+                basename='transactiontype')
 router.register(r'transfers', TransferViewSet, basename='transfer')
 
 urlpatterns = [

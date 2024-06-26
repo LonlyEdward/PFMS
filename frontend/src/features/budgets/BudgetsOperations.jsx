@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
 import { useState } from "react";
-// import NewBudgetForm from "../budgets/NewBudgetForm";
-// import NewEntryForm from "../budgets/NewEntryForm";
 import Modal from "../../ui/Modal";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Shr = styled.hr`
   border: 1px solid var(--color-grey-4);
@@ -32,6 +32,7 @@ const CButton = styled(Button)`
 `;
 
 function BudgetsOperations() {
+  const [isLoading, setIsLoading] = useState(false);
   const [showNewBudgetModal, setShowNewBudgetModal] = useState(false);
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
 
@@ -40,6 +41,56 @@ function BudgetsOperations() {
 
   const handleOpenNewEntryModal = () => setShowNewEntryModal(true);
   const handleCloseNewEntryModal = () => setShowNewEntryModal(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    amount: "",
+    // date_created: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await axios({
+        method: "post",
+        url: `http://127.0.0.1:8000/api/budgets/`,
+        withCredentials: true,
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }).then((response) => {
+        console.log(response.data);
+        toast.success("Budget added successfully");
+        handleCloseNewBudgetModal();
+      });
+      // navigate("/");
+    } catch (error) {
+      toast.error("Error adding Budget");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
 
   return (
     <>
@@ -56,29 +107,54 @@ function BudgetsOperations() {
           <>
             <CButton onClick={handleCloseNewBudgetModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <Button>Create Budget</Button>&nbsp;&nbsp;&nbsp;
+            <Button onClick={handleSubmit}>Create Budget</Button>
+            &nbsp;&nbsp;&nbsp;
           </>
         }
       >
         <Form type="modal">
           <FormRow label="Budget name">
-            <Input />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Amount">
-            <Input />
+            <Input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Start Date">
-            <Input type="date" />
+            <Input
+              type="date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="End Date">
-            <Input type="date" />
+            <Input
+              type="date"
+              name="end_date"
+              value={formData.end_date}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Description">
-            <Textarea />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </FormRow>
         </Form>
       </Modal>

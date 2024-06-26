@@ -70,7 +70,7 @@ function RemindersOperations() {
         toast.success("Reminder added successfully");
         handleCloseNewReminderModal();
       });
-      navigate("/Reminders");
+      navigate("/");
     } catch (error) {
       toast.error("Error adding reminder");
       console.log(error);

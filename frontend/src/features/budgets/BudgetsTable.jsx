@@ -11,6 +11,7 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const SButton = styled(Button)`
   background-color: var(--primary-color-10);
@@ -36,7 +37,6 @@ const Shr = styled.hr`
   margin: 0.2rem;
 `;
 
-
 const columns = [
   "Name",
   "Description",
@@ -48,21 +48,34 @@ const columns = [
 ];
 
 function BudgetsTable() {
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [showEditModal, setShowEditModal] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
 
-  const handleOpenEditModal = () => setShowEditModal(true);
-  const handleCloseEditModal = () => setShowEditModal(false);
+  const [selectedBudgetId, setSelectedBudgetId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const handleOpenDeleteModal = () => setShowDeleteModal(true);
-  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleOpenEditModal = (budget) => {
+    setSelectedBudgetId(budget.id);
+    setFormData({
+      name: budget.name,
+      description: budget.description,
+      amount: budget.amount,
+      date_created: budget.date_created,
+      start_date: budget.start_date,
+      end_date: budget.end_date,
+    });
+    setShowEditModal(true);
+  };
+
+  // const handleOpenEditModal = () => setShowEditModal(true);
+  const handleCloseEditModal = () => setShowEditModal(false);
 
   const handleOpenBudgetModal = () => setShowBudgetModal(true);
   const handleCloseBudgetModal = () => setShowBudgetModal(false);
 
   const [budgets, setBudgets] = useState([]);
 
+  //Api call to get budgets from the backend
   const getBudgets = async () => {
     const response = await axios.get("http://127.0.0.1:8000/api/budgets", {
       headers: {
@@ -76,6 +89,54 @@ function BudgetsTable() {
   useEffect(() => {
     getBudgets();
   }, []);
+
+  ////////api call to delete a specific budget
+  const deleteBudget = async (id) => {
+    await axios.delete(`http://127.0.0.1:8000/api/budgets/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    toast.success("Budget deleted successfully");
+    getBudgets();
+  };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    amount: "",
+    date_created: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/budgets/${selectedBudgetId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      toast.success("Budget updated successfully");
+      setShowEditModal(false);
+      getBudgets();
+    } catch (error) {
+      console.error("There was an error updating the item!", error);
+      toast.error("Failed to update the Budget");
+    }
+  };
 
   return (
     <>
@@ -91,7 +152,10 @@ function BudgetsTable() {
               <TableCell>{budget.start_date}</TableCell>
               <TableCell>{budget.end_date}</TableCell>
               <TableCell>
-                <SButton size="small" onClick={handleOpenEditModal}>
+                <SButton
+                  size="small"
+                  onClick={() => handleOpenEditModal(budget)}
+                >
                   Edit{" "}
                 </SButton>
                 &nbsp;
@@ -102,7 +166,7 @@ function BudgetsTable() {
                 <Button
                   size="small"
                   variation="danger"
-                  onClick={handleOpenDeleteModal}
+                  onClick={() => deleteBudget(budget.id)}
                 >
                   Delete
                 </Button>
@@ -120,45 +184,55 @@ function BudgetsTable() {
           <>
             <CButton onClick={handleCloseEditModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton>Update Budget</SButton>
+            <SButton onClick={handleUpdate}>Update Budget</SButton>
           </>
         }
       >
         <Form type="modal">
           <FormRow label="Budget name">
-            <Input />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Amount">
-            <Input />
+            <Input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Start Date">
-            <Input type="date" />
+            <Input
+              type="date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="End Date">
-            <Input type="date" />
+            <Input
+              type="date"
+              name="end_date"
+              value={formData.end_date}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Description">
-            <Textarea />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </FormRow>
         </Form>
-      </Modal>
-      <Modal
-        show={showDeleteModal}
-        handleClose={handleCloseDeleteModal}
-        title="Delete Budget"
-        footer={
-          <>
-            <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
-            &nbsp;&nbsp;&nbsp;
-            <Button variation="danger">Delete</Button>
-          </>
-        }
-      >
-        <p>Are you sure you want to proceed? This action cannot be undone.</p>
       </Modal>
       <Modal
         show={showBudgetModal}
