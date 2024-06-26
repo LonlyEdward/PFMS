@@ -138,7 +138,7 @@ class AccountTypeViewSet(ReadOnlyModelViewSet):
 
 
 class TransferFunds(APIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         serializer = TransferSerializer(data=request.data)

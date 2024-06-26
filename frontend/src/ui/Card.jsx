@@ -38,17 +38,25 @@ const CardActions = styled.div`
   /* margin-top: 0px; */
 `;
 
-
 const Card = ({ account, onEdit, onDelete }) => (
   <CardContainer>
     <CardHeader>{account.name}</CardHeader>
     <CardContent>Description: {account.description}</CardContent>
     <CardContent>Balance: {account.balance}</CardContent>
     <CardContent>Last Updated: {account.date_updated}</CardContent>
-    <CardContent>Account Type: {account.accounttype}</CardContent>
+    <CardContent>Account Type: {account.accounttype_name}</CardContent>
     <CardActions>
-      <BlueButton size="small" onClick={() => onEdit(account.id)}>Edit</BlueButton>&nbsp;&nbsp;
-      <Button size="small" variation="danger" onClick={() => onDelete(account.id)}>Delete</Button>
+      <BlueButton size="small" onClick={() => onEdit(account.id)}>
+        Edit
+      </BlueButton>
+      &nbsp;&nbsp;
+      <Button
+        size="small"
+        variation="danger"
+        onClick={() => onDelete(account.id)}
+      >
+        Delete
+      </Button>
     </CardActions>
   </CardContainer>
 );

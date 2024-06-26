@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, AccountType, Account, Transfer, TransactionType, Transaction, Budget, BudgetEntry, Reminder
+from .models import *
 from django.contrib.auth import authenticate
 
 
@@ -53,10 +53,21 @@ class AccountTypeSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    # accounttype_name = serializers.SerializerMethodField()
+    accounttype_name = serializers.CharField(
+        source='accounttype.name', read_only=True)
+    accounttype = serializers.PrimaryKeyRelatedField(
+        queryset=AccountType.objects.all(), write_only=True)
+
     class Meta:
         model = Account
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['id', 'name', 'description', 'balance',
+                  'date_updated', 'accounttype', 'accounttype_name']
         read_only_fields = ['customuser']
+
+    def get_accounttype_name(self, obj):
+        return obj.accounttype.name
 
 
 class TransferSerializer(serializers.ModelSerializer):
@@ -67,15 +78,32 @@ class TransferSerializer(serializers.ModelSerializer):
 
 
 class TransactionTypeSerializer(serializers.ModelSerializer):
+        # accounttype_name = serializers.SerializerMethodField()
+    transactiontype_name = serializers.CharField(
+        source='transactiontype.name', read_only=True)
+    transactiontype = serializers.PrimaryKeyRelatedField(
+        queryset=TransactionType.objects.all(), write_only=True)
+
     class Meta:
         model = TransactionType
         fields = fields = '__all__'
+        
+    def get_transactiontype_name(self, obj):
+        return obj.transactiontype.name
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+            # accounttype_name = serializers.SerializerMethodField()
+    transactiontype_name = serializers.CharField(
+        source='transactiontype.name', read_only=True)
+    transactiontype = serializers.PrimaryKeyRelatedField(
+        queryset=TransactionType.objects.all(), write_only=True)
+
     class Meta:
         model = Transaction
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['id', 'name', 'description', 'amount',
+                  'date', 'transactiontype', 'transactiontype_name']
         read_only_fields = ['customuser']
 
 

@@ -22,10 +22,22 @@ function AccountsList() {
   const [showEditModal, setShowEditModal] = useState(false);
   // const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleOpenEditModal = () => setShowEditModal(true);
+  //   const handleOpenEditModal = () => setShowEditModal(true);
+
+  const [selectedBudgetId, setSelectedBudgetId] = useState(null);
+  const handleOpenEditModal = (budget) => {
+    setSelectedBudgetId(budget.id);
+    setFormData({
+      name: budget.name,
+      balance: budget.balance,
+      accountype: budget.accounttype,
+      description: budget.description,
+    });
+    setShowEditModal(true);
+  };
+
   const handleCloseEditModal = () => setShowEditModal(false);
 
-  // const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
 
   const getAccounttypes = async () => {
@@ -48,13 +60,14 @@ function AccountsList() {
         Authorization: `Bearer ${localStorage.getItem("access")}`,
       },
     });
-    toast.success("Reminder deleted successfully");
+    toast.success("Account deleted successfully");
     getAccounts();
   };
 
   const [formData, setFormData] = useState({
     name: "",
-    date: "",
+    balance: "",
+    accounttype: "",
     description: "",
   });
 
@@ -63,6 +76,27 @@ function AccountsList() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/accounts/${selectedBudgetId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      toast.success("Account updated successfully");
+      setShowEditModal(false);
+      getAccounts();
+    } catch (error) {
+      console.error("There was an error updating the item!", error);
+      toast.error("Failed to update the account");
+    }
   };
 
   const [accounts, setAccounts] = useState([]);
@@ -88,7 +122,8 @@ function AccountsList() {
           <Card
             key={account.id}
             account={account}
-            onEdit={handleOpenEditModal}
+            // onEdit={handleOpenEditModal}
+            onEdit={() => handleOpenEditModal(account)}
             onDelete={() => deleteAccount(account.id)}
           />
         ))}
@@ -101,7 +136,7 @@ function AccountsList() {
           <>
             <CancelButton onClick={handleCloseEditModal}>Cancel</CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <BlueButton>Update Account</BlueButton>
+            <BlueButton onClick={handleUpdate}>Update Account</BlueButton>
           </>
         }
       >

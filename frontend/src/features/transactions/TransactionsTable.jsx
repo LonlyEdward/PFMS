@@ -139,7 +139,7 @@ function TransactionsTable() {
               <TableCell>{transaction.description}</TableCell>
               <TableCell>{transaction.amount}</TableCell>
               <TableCell>{transaction.date}</TableCell>
-              <TableCell>{transaction.transactiontype}</TableCell>
+              <TableCell>{transaction.transactiontype_name}</TableCell>
               <TableCell>
                 <BlueButton
                   size="small"
