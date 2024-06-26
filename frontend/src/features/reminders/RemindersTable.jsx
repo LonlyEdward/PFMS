@@ -7,7 +7,7 @@ import Button from "../../ui/Button";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
@@ -40,15 +40,25 @@ const CButton = styled(Button)`
 const columns = ["Name", "Description", "Date", "Actions"];
 
 function RemindersTable() {
+  const [selectedReminderId, setSelectedReminderId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleOpenEditModal = () => setShowEditModal(true);
+  // const handleOpenEditModal = () => setShowEditModal(true);
+  const handleOpenEditModal = (reminder) => {
+    setSelectedReminderId(reminder.id);
+    setFormData({
+      name: reminder.name,
+      date: reminder.date,
+      description: reminder.description,
+    });
+    setShowEditModal(true);
+  };
+
   const handleCloseEditModal = () => setShowEditModal(false);
 
-  const handleOpenDeleteModal = () => setShowDeleteModal(true);
-  const handleCloseDeleteModal = () => setShowDeleteModal(false);
-
+  // const handleOpenDeleteModal = () => setShowDeleteModal(true);
+  // const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const [reminders, setReminders] = useState([]);
 
@@ -66,6 +76,73 @@ function RemindersTable() {
     getReminders();
   }, []);
 
+  const deleteReminder = async (id) => {
+    await axios.delete(`http://127.0.0.1:8000/api/reminders/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    toast.success("Reminder deleted successfully");
+    getReminders();
+  };
+
+  //-----------------
+
+  // const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    date: "",
+    description: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // const handleUpdate = async () => {
+  //   try {
+  //     const response = await axios.put(
+  //       `http://127.0.0.1:8000/api/reminders/${reminders.data}/`,
+  //       {
+  //         headers: {
+  //           withCredentials: true,
+  //           Authorization: `Bearer ${localStorage.getItem("access")}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error("There was an error updating the item!", error);
+  //   }
+  // };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/reminders/${selectedReminderId}/`,
+        formData,
+        {
+          headers: {
+            // withCredentials: true,
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      toast.success("Reminder updated successfully");
+      setShowEditModal(false);
+      getReminders();
+    } catch (error) {
+      console.error("There was an error updating the item!", error);
+      toast.error("Failed to update the reminder");
+    }
+  };
+
+  //---------------
+
   return (
     <>
       <Table>
@@ -77,14 +154,16 @@ function RemindersTable() {
               <TableCell>{reminder.description}</TableCell>
               <TableCell>{reminder.date}</TableCell>
               <TableCell>
-                <SButton size="small" onClick={handleOpenEditModal}>
+                {/* <SButton size="small" onClick={handleOpenEditModal(reminder)}> */}
+                <SButton size="small" onClick={() => handleOpenEditModal(reminder)}>
                   Edit
                 </SButton>
                 &nbsp;
                 <Button
                   size="small"
                   variation="danger"
-                  onClick={handleOpenDeleteModal}
+                  // onClick={handleOpenDeleteModal}
+                  onClick={() => deleteReminder(reminder.id)}
                 >
                   Delete
                 </Button>
@@ -102,25 +181,40 @@ function RemindersTable() {
           <>
             <CButton onClick={handleCloseEditModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton>Update Reminder</SButton>
+            <SButton onClick={handleUpdate}>Update Reminder</SButton>
           </>
         }
       >
         <Form type="modal">
           <FormRow label="Reminder name">
-            <Input />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Date">
-            <Input type="date" />
+            <Input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+            />
           </FormRow>
           <Shr />
           <FormRow label="Description">
-            <Textarea />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </FormRow>
         </Form>
       </Modal>
-      <Modal
+
+      {/* <Modal
         show={showDeleteModal}
         handleClose={handleCloseDeleteModal}
         title="Delete Reminder"
@@ -128,12 +222,17 @@ function RemindersTable() {
           <>
             <CButton onClick={handleCloseDeleteModal}>Cancel</CButton>
             &nbsp;&nbsp;&nbsp;
-            <Button variation="danger">Delete</Button>
+            <Button
+              variation="danger"
+              onClick={() => deleteReminder(reminders.id)}
+            >
+              Delete
+            </Button>
           </>
         }
       >
         <p>Are you sure you want to proceed? This action cannot be undone.</p>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

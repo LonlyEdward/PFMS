@@ -64,6 +64,9 @@ class ReminderViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Reminder.objects.filter(customuser=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(customuser=self.request.user)
+
 
 class BudgetViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
