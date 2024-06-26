@@ -1,19 +1,18 @@
-import styled from "styled-components";
+import Row from "../../ui/Row";
 import Button from "../../ui/Button";
-import { useState, useEffect } from "react";
 import Modal from "../../ui/Modal";
+import CancelButton from "../../ui/CancelButton";
+import { useState, useEffect } from "react";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import Textarea from "../../ui/Textarea";
 import Line from "../../ui/Line";
-import CancelButton from "../../ui/CancelButton";
+import Textarea from "../../ui/Textarea";
+import Select from "../../ui/Select";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Select from "../../ui/Select";
 import { Link } from "react-router-dom";
-import Row from "../../ui/Row";
-
+import styled from "styled-components";
 
 const Span = styled.div`
   font-size: 2rem;
@@ -28,21 +27,15 @@ const Span = styled.div`
 }
 `
 
+function TransfersOperations() {
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const handleOpenTransferModal = () => setShowTransferModal(true);
+  const handleCloseTransferModal = () => setShowTransferModal(false);
 
-function AccountsOperations() {
-
-  const [showAccountModal, setShowAccountModal] = useState(false);
-  const handleOpenAccountModal = () => setShowAccountModal(true);
-  const handleCloseAccountModal = () => setShowAccountModal(false);
-
-
-
-
-  const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
 
-  const getAccounttypes = async () => {
-    const response = await axios.get("http://127.0.0.1:8000/api/accounttype/", {
+  const getAccounts = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/accounts/", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access")}`,
       },
@@ -52,13 +45,15 @@ function AccountsOperations() {
   };
 
   useEffect(() => {
-    getAccounttypes();
+    getAccounts();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    balance: "",
-    accounttype: "",
+    amount: "",
+    from_account: "",
+    to_account: "",
     description: "",
   });
 
@@ -80,7 +75,7 @@ function AccountsOperations() {
     try {
       await axios({
         method: "post",
-        url: `http://127.0.0.1:8000/api/accounts/`,
+        url: `http://127.0.0.1:8000/api/transfers/`,
         withCredentials: true,
         data: formData,
         headers: {
@@ -89,11 +84,11 @@ function AccountsOperations() {
         },
       }).then((response) => {
         console.log(response.data);
-        toast.success("Account added successfully");
-        handleCloseAccountModal();
+        toast.success("Funds Transferred Successfully");
+        handleCloseTransferModal();
       });
     } catch (error) {
-      toast.error("Error adding Account");
+      toast.error("Error Transferring Tunds");
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -103,27 +98,26 @@ function AccountsOperations() {
   return (
     <>
       <Row type="horizontal">
-        <Button onClick={handleOpenAccountModal}>Add New Account</Button>
-        <Link to="/transfers"><Span>Transfers</Span></Link>
+        <Button onClick={handleOpenTransferModal}>New Transfer</Button>
+        <Link to="/accounts"><Span>Go back</Span></Link>
       </Row>
 
       <Modal
-        show={showAccountModal}
-        handleClose={handleCloseAccountModal}
-        title="Add New Account"
+        show={showTransferModal}
+        handleClose={handleCloseTransferModal}
+        title="New Transfer"
         footer={
           <>
-            <CancelButton onClick={handleCloseAccountModal}>
+            <CancelButton onClick={handleCloseTransferModal}>
               Cancel
             </CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <Button onClick={handleSubmit}>Add Account</Button>
-            &nbsp;&nbsp;&nbsp;
+            <Button onClick={handleSubmit}>Confirm Transfer</Button>
           </>
         }
       >
         <Form type="modal">
-          <FormRow label="Account name">
+          <FormRow label="Transfer name">
             <Input
               type="text"
               name="name"
@@ -132,19 +126,34 @@ function AccountsOperations() {
             />
           </FormRow>
           <Line />
-          <FormRow label="Balance">
+          <FormRow label="Amount">
             <Input
               type="number"
-              name="balance"
-              value={formData.balance}
+              name="amount"
+              value={formData.amount}
               onChange={handleChange}
             />
           </FormRow>
           <Line />
-          <FormRow label="Account Type">
+          <FormRow label="From Account">
             <Select
-              name="accounttype"
-              value={formData.accounttype}
+              name="from_account"
+              value={formData.from_account}
+              onChange={handleChange}
+            >
+              <option value="">--Select an option--</option>
+              {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
+          </FormRow>
+          <Line />
+          <FormRow label="To Account">
+            <Select
+              name="to_account"
+              value={formData.to_account}
               onChange={handleChange}
             >
               <option value="">--Select an option--</option>
@@ -169,4 +178,4 @@ function AccountsOperations() {
   );
 }
 
-export default AccountsOperations;
+export default TransfersOperations;

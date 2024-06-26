@@ -23,7 +23,7 @@ const CardHeader = styled.h2`
   margin: 0 0 8px 0;
   color: var(--color-grey-7);
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--color-grey-7);
+  border-bottom: 2px solid var(--primary-color-20);
 `;
 
 const CardContent = styled.div`
@@ -35,7 +35,8 @@ const CardContent = styled.div`
 const CardActions = styled.div`
   display: flex;
   justify-content: flex-end;
-  /* margin-top: 0px; */
+  border-top: 2px solid var(--primary-color-20);
+  padding-top: 10px;
 `;
 
 const Card = ({ account, onEdit, onDelete }) => (

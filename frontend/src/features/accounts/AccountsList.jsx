@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Card from "../../ui/Card";
-import styled from "styled-components";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
@@ -12,17 +11,11 @@ import CancelButton from "../../ui/CancelButton";
 import toast from "react-hot-toast";
 import Modal from "../../ui/Modal";
 import BlueButton from "../../ui/BlueButton";
+import Row from "../../ui/Row";
 
-const Fdiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
 
 function AccountsList() {
   const [showEditModal, setShowEditModal] = useState(false);
-  // const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  //   const handleOpenEditModal = () => setShowEditModal(true);
 
   const [selectedBudgetId, setSelectedBudgetId] = useState(null);
   const handleOpenEditModal = (budget) => {
@@ -117,7 +110,7 @@ function AccountsList() {
 
   return (
     <>
-      <Fdiv>
+      <Row type="wrap">
         {accounts.map((account) => (
           <Card
             key={account.id}
@@ -127,7 +120,7 @@ function AccountsList() {
             onDelete={() => deleteAccount(account.id)}
           />
         ))}
-      </Fdiv>
+      </Row>
       <Modal
         show={showEditModal}
         handleClose={handleCloseEditModal}

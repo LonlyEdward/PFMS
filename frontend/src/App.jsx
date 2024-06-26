@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Reports from "./pages/Reports";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Transfers from "./pages/Transfers";
 import AppLayout from "./ui/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./ui/ProtectedRoute";
@@ -34,6 +35,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="accounts" element={<Accounts />} />
             <Route path="transactions" element={<Transactions />} />
+            <Route path="transfers" element={<Transfers />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="reminders" element={<Reminders />} />
             <Route path="reports" element={<Reports />} />

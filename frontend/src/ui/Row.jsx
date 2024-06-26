@@ -20,7 +20,7 @@ const Row = styled.div`
     props.type === "wrap" &&
     css`
       flex-wrap: wrap;
-      /* gap: 1.6rem; */
+      gap: 1.5rem;
     `}
 `;
 

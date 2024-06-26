@@ -6,10 +6,10 @@ from .models import *
 from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db import transaction
+# from django.db import transaction
 
 
 class UserRegistrationAPIView(GenericAPIView):
@@ -97,7 +97,28 @@ class TransferViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Transfer.objects.filter(customuser=self.request.user)
 
+    # def perform_create(self, serializer):
+    #     serializer.save(customuser=self.request.user)
+
     def perform_create(self, serializer):
+        from_account = serializer.validated_data['from_account']
+        to_account = serializer.validated_data['to_account']
+        amount = serializer.validated_data['amount']
+
+        # Ensure user owns the accounts
+        if from_account.customuser != self.request.user or to_account.customuser != self.request.user:
+            return Response({"detail": "Invalid accounts selected."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the from_account has sufficient balance
+        if from_account.balance < amount:
+            return Response({"detail": "Insufficient funds."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Perform the transfer
+        from_account.balance -= amount
+        to_account.balance += amount
+        from_account.save()
+        to_account.save()
+
         serializer.save(customuser=self.request.user)
 
 
@@ -122,13 +143,9 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
 
 class TransactionTypeViewSet(ReadOnlyModelViewSet):
-# class TransactionTypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = TransactionType.objects.all()
     serializer_class = TransactionTypeSerializer
-
-    # def get_queryset(self):
-    #     return Reminder.objects.filter(customuser=self.request.user)
 
 
 class AccountTypeViewSet(ReadOnlyModelViewSet):
@@ -137,36 +154,36 @@ class AccountTypeViewSet(ReadOnlyModelViewSet):
     serializer_class = AccountTypeSerializer
 
 
-class TransferFunds(APIView):
-    # permission_classes = (IsAuthenticated,)
+# class TransferFunds(APIView):
+#     # permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        serializer = TransferSerializer(data=request.data)
-        if serializer.is_valid():
-            from_account_id = serializer.validated_data['from_account']
-            to_account_id = serializer.validated_data['to_account']
-            amount = serializer.validated_data['amount']
+#     def post(self, request):
+#         serializer = TransferSerializer(data=request.data)
+#         if serializer.is_valid():
+#             from_account_id = serializer.validated_data['from_account']
+#             to_account_id = serializer.validated_data['to_account']
+#             amount = serializer.validated_data['amount']
 
-            try:
-                with transaction.atomic():
-                    from_account = Account.objects.select_for_update().get(id=from_account_id)
-                    to_account = Account.objects.select_for_update().get(id=to_account_id)
+#             try:
+#                 with transaction.atomic():
+#                     from_account = Account.objects.select_for_update().get(id=from_account_id)
+#                     to_account = Account.objects.select_for_update().get(id=to_account_id)
 
-                    if from_account.balance < amount:
-                        return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
+#                     if from_account.balance < amount:
+#                         return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
 
-                    from_account.balance -= amount
-                    to_account.balance += amount
+#                     from_account.balance -= amount
+#                     to_account.balance += amount
 
-                    from_account.save()
-                    to_account.save()
+#                     from_account.save()
+#                     to_account.save()
 
-                    transfer = Transfer.objects.create(
-                        from_account=from_account,
-                        to_account=to_account,
-                        amount=amount
-                    )
-                return Response({"success": "Transfer completed"}, status=status.HTTP_200_OK)
-            except Account.DoesNotExist:
-                return Response({"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#                     transfer = Transfer.objects.create(
+#                         from_account=from_account,
+#                         to_account=to_account,
+#                         amount=amount
+#                     )
+#                 return Response({"success": "Transfer completed"}, status=status.HTTP_200_OK)
+#             except Account.DoesNotExist:
+#                 return Response({"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

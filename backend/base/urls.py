@@ -16,6 +16,7 @@ router.register(r'transactiontype', TransactionTypeViewSet,
                 basename='transactiontype')
 router.register(r'transfers', TransferViewSet, basename='transfer')
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path("register/", UserRegistrationAPIView.as_view(), name="register-user"),
@@ -23,5 +24,5 @@ urlpatterns = [
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('transfer/', TransferFunds.as_view(), name='transfer-funds'),
+    # path('transfer/', TransferFunds.as_view(), name='transfer-funds'),
 ]

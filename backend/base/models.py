@@ -62,8 +62,6 @@ class Transaction(models.Model):
     customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     transactiontype = models.ForeignKey(
         TransactionType, on_delete=models.CASCADE)
-    # transactiontype = models.ManyToManyField(
-    #     TransactionType)
 
     def __str__(self):
         return self.name
@@ -100,11 +98,3 @@ class Reminder(models.Model):
     def __str__(self):
         return self.name
 
-
-# class Report(models.Model):
-#     name = models.CharField(max_length=30)
-#     date_created = models.DateField()
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.name
