@@ -56,6 +56,7 @@ function SignupForm() {
       console.log("success", response.data);
       toast.success("Registration successful");
     } catch (error) {
+      console.log("Fix", error)
       toast.error("Error during registration");
     } finally {
       setIsLoading(false);

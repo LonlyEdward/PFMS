@@ -1,15 +1,27 @@
 from rest_framework import viewsets, status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import *
 from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-# from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-# from django.db import transaction
+from rest_framework import status, generics
+from rest_framework.views import APIView
+
+class CountsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        data = {
+            "transactions": Transaction.objects.filter(customuser=user).count(),
+            "reminders": Reminder.objects.filter(customuser=user).count(),
+            "bank_accounts": Account.objects.filter(customuser=user).count(),
+            "budgets": Budget.objects.filter(customuser=user).count()
+        }
+        return Response(data)
 
 
 class UserRegistrationAPIView(GenericAPIView):
@@ -97,9 +109,6 @@ class TransferViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Transfer.objects.filter(customuser=self.request.user)
 
-    # def perform_create(self, serializer):
-    #     serializer.save(customuser=self.request.user)
-
     def perform_create(self, serializer):
         from_account = serializer.validated_data['from_account']
         to_account = serializer.validated_data['to_account']
@@ -107,11 +116,15 @@ class TransferViewSet(viewsets.ModelViewSet):
 
         # Ensure user owns the accounts
         if from_account.customuser != self.request.user or to_account.customuser != self.request.user:
-            return Response({"detail": "Invalid accounts selected."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         # Check if the from_account has sufficient balance
         if from_account.balance < amount:
-            return Response({"detail": "Insufficient funds."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if from_account and to_account are the same
+        if from_account == to_account:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         # Perform the transfer
         from_account.balance -= amount
@@ -122,13 +135,18 @@ class TransferViewSet(viewsets.ModelViewSet):
         serializer.save(customuser=self.request.user)
 
 
-class BudgetEntryViewSet(viewsets.ModelViewSet):
+class BudgetEntryCreate(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = BudgetEntrySerializer
+
+
+class BudgetEntryList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BudgetEntrySerializer
 
     def get_queryset(self):
-        return BudgetEntry.objects.filter(customuser=self.request.user)
-    # edit this so that a user can have a budget entry but they will be retrieved based on the id of the budget
+        budget_id = self.kwargs['budget_id']
+        return BudgetEntry.objects.filter(budget_id=budget_id)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -154,36 +172,9 @@ class AccountTypeViewSet(ReadOnlyModelViewSet):
     serializer_class = AccountTypeSerializer
 
 
-# class TransferFunds(APIView):
-#     # permission_classes = (IsAuthenticated,)
+class UserInfoAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CustomUserSerializer
 
-#     def post(self, request):
-#         serializer = TransferSerializer(data=request.data)
-#         if serializer.is_valid():
-#             from_account_id = serializer.validated_data['from_account']
-#             to_account_id = serializer.validated_data['to_account']
-#             amount = serializer.validated_data['amount']
-
-#             try:
-#                 with transaction.atomic():
-#                     from_account = Account.objects.select_for_update().get(id=from_account_id)
-#                     to_account = Account.objects.select_for_update().get(id=to_account_id)
-
-#                     if from_account.balance < amount:
-#                         return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
-
-#                     from_account.balance -= amount
-#                     to_account.balance += amount
-
-#                     from_account.save()
-#                     to_account.save()
-
-#                     transfer = Transfer.objects.create(
-#                         from_account=from_account,
-#                         to_account=to_account,
-#                         amount=amount
-#                     )
-#                 return Response({"success": "Transfer completed"}, status=status.HTTP_200_OK)
-#             except Account.DoesNotExist:
-#                 return Response({"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        return self.request.user

@@ -12,10 +12,10 @@ import Reports from "./pages/Reports";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Transfers from "./pages/Transfers";
+import BudgetEntries from "./pages/BudgetEntries";
 import AppLayout from "./ui/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./ui/ProtectedRoute";
-
 
 function App() {
   return (
@@ -23,7 +23,6 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          {/* <Route element={<AppLayout />}> */}
           <Route
             element={
               <ProtectedRoute>
@@ -37,6 +36,7 @@ function App() {
             <Route path="transactions" element={<Transactions />} />
             <Route path="transfers" element={<Transfers />} />
             <Route path="budgets" element={<Budgets />} />
+            <Route path="/budgets/:budgetId/entries" element={<BudgetEntries />} />
             <Route path="reminders" element={<Reminders />} />
             <Route path="reports" element={<Reports />} />
             <Route path="settings" element={<Settings />} />

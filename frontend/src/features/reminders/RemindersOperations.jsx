@@ -9,11 +9,9 @@ import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 
 function RemindersOperations() {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showNewReminderModal, setShowNewReminderModal] = useState(false);
   const handleOpenNewReminderModal = () => setShowNewReminderModal(true);
@@ -55,7 +53,6 @@ function RemindersOperations() {
         toast.success("Reminder added successfully");
         handleCloseNewReminderModal();
       });
-      navigate("/");
     } catch (error) {
       toast.error("Error adding reminder");
       console.log(error);

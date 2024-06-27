@@ -43,8 +43,8 @@ function TransfersTable() {
               <TableCell>{transfer.description}</TableCell>
               <TableCell>{transfer.amount}</TableCell>
               <TableCell>{transfer.date}</TableCell>
-              <TableCell>{transfer.from_account}</TableCell>
-              <TableCell>{transfer.to_account}</TableCell>
+              <TableCell>{transfer.from_account.name}</TableCell>
+              <TableCell>{transfer.to_account.name}</TableCell>
             </TableRow>
           ))}
         </tbody>

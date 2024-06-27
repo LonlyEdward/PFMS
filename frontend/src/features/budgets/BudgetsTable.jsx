@@ -1,5 +1,4 @@
 import Button from "../../ui/Button";
-import styled from "styled-components";
 import { useState, useEffect } from "react";
 import Table from "../../ui/Table";
 import TableHeader from "../../ui/TableHeader";
@@ -12,30 +11,10 @@ import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const SButton = styled(Button)`
-  background-color: var(--primary-color-10);
-  &:hover {
-    background-color: var(--primary-color-30);
-  }
-`;
-
-const CButton = styled(Button)`
-  background-color: var(--color-grey-1);
-  color: var(--color-grey-7);
-  border: 2px solid var(--color-grey-5);
-
-  &:hover {
-    background-color: var(--color-grey-3);
-    border: 2px solid var(--color-grey-6);
-  }
-`;
-
-const Shr = styled.hr`
-  border: 1px solid var(--color-grey-4);
-  opacity: 0.3;
-  margin: 0.2rem;
-`;
+import BlueButton from "../../ui/BlueButton";
+import CancelButton from "../../ui/CancelButton";
+import Line from "../../ui/Line";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   "Name",
@@ -48,8 +27,9 @@ const columns = [
 ];
 
 function BudgetsTable() {
-  // const [showEditModal, setShowEditModal] = useState(false);
-  const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const navigate = useNavigate();
+
+  // const [showBudgetModal, setShowBudgetModal] = useState(false);
 
   const [selectedBudgetId, setSelectedBudgetId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -67,11 +47,10 @@ function BudgetsTable() {
     setShowEditModal(true);
   };
 
-  // const handleOpenEditModal = () => setShowEditModal(true);
   const handleCloseEditModal = () => setShowEditModal(false);
 
-  const handleOpenBudgetModal = () => setShowBudgetModal(true);
-  const handleCloseBudgetModal = () => setShowBudgetModal(false);
+  // const handleOpenBudgetModal = () => setShowBudgetModal(true);
+  // const handleCloseBudgetModal = () => setShowBudgetModal(false);
 
   const [budgets, setBudgets] = useState([]);
 
@@ -90,7 +69,7 @@ function BudgetsTable() {
     getBudgets();
   }, []);
 
-  ////////api call to delete a specific budget
+  //api call to delete a specific budget
   const deleteBudget = async (id) => {
     await axios.delete(`http://127.0.0.1:8000/api/budgets/${id}/`, {
       headers: {
@@ -138,6 +117,10 @@ function BudgetsTable() {
     }
   };
 
+  const viewEntries = (budgetId) => {
+    navigate(`/budgets/${budgetId}/entries`);
+  };
+
   return (
     <>
       <Table>
@@ -152,16 +135,16 @@ function BudgetsTable() {
               <TableCell>{budget.start_date}</TableCell>
               <TableCell>{budget.end_date}</TableCell>
               <TableCell>
-                <SButton
+                <BlueButton
                   size="small"
                   onClick={() => handleOpenEditModal(budget)}
                 >
                   Edit{" "}
-                </SButton>
+                </BlueButton>
                 &nbsp;
-                <SButton size="small" onClick={handleOpenBudgetModal}>
-                  View
-                </SButton>
+                <BlueButton size="small" onClick={() => viewEntries(budget.id)}>
+                  View Entries
+                </BlueButton>
                 &nbsp;
                 <Button
                   size="small"
@@ -182,9 +165,9 @@ function BudgetsTable() {
         title="Edit Budget Details"
         footer={
           <>
-            <CButton onClick={handleCloseEditModal}>Cancel</CButton>
+            <CancelButton onClick={handleCloseEditModal}>Cancel</CancelButton>
             &nbsp;&nbsp;&nbsp;
-            <SButton onClick={handleUpdate}>Update Budget</SButton>
+            <BlueButton onClick={handleUpdate}>Update Budget</BlueButton>
           </>
         }
       >
@@ -197,7 +180,7 @@ function BudgetsTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Amount">
             <Input
               type="number"
@@ -206,7 +189,7 @@ function BudgetsTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Start Date">
             <Input
               type="date"
@@ -215,7 +198,7 @@ function BudgetsTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="End Date">
             <Input
               type="date"
@@ -224,7 +207,7 @@ function BudgetsTable() {
               onChange={handleChange}
             />
           </FormRow>
-          <Shr />
+          <Line />
           <FormRow label="Description">
             <Textarea
               name="description"
@@ -234,18 +217,18 @@ function BudgetsTable() {
           </FormRow>
         </Form>
       </Modal>
-      <Modal
+      {/* <Modal
         show={showBudgetModal}
         handleClose={handleCloseBudgetModal}
         title="Budget Entries"
         footer={
           <>
-            <SButton onClick={handleCloseBudgetModal}>Close</SButton>
+            <BlueButton onClick={handleCloseBudgetModal}>Close</BlueButton>
           </>
         }
       >
         <p>Preview of selected budget entires</p>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

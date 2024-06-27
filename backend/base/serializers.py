@@ -68,11 +68,38 @@ class AccountSerializer(serializers.ModelSerializer):
         return obj.accounttype.name
 
 
+class AccountNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['id', 'name']
+
+
 class TransferSerializer(serializers.ModelSerializer):
+    from_account = serializers.PrimaryKeyRelatedField(
+        queryset=Account.objects.all(), write_only=True)
+    to_account = serializers.PrimaryKeyRelatedField(
+        queryset=Account.objects.all(), write_only=True)
+    from_account_details = AccountNameSerializer(
+        source='from_account', read_only=True)
+    to_account_details = AccountNameSerializer(
+        source='to_account', read_only=True)
+
     class Meta:
         model = Transfer
         fields = '__all__'
         read_only_fields = ['customuser']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['from_account'] = {
+            'id': instance.from_account.id,
+            'name': instance.from_account.name
+        }
+        representation['to_account'] = {
+            'id': instance.to_account.id,
+            'name': instance.to_account.name
+        }
+        return representation
 
 
 class TransactionTypeSerializer(serializers.ModelSerializer):

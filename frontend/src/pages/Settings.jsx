@@ -1,11 +1,11 @@
 import Row from "../ui/Row";
-import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
+import UserDataForm from "../features/authentication/UserDataForm";
 
 function Settings() {
   return (
     <>
       <Row>
-        <UpdateUserDataForm />
+        <UserDataForm />
       </Row>
     </>
   );

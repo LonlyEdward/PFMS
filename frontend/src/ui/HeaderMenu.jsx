@@ -5,10 +5,8 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { FaRegUser } from "react-icons/fa6";
 import toast from "react-hot-toast";
-// import { ACCESS_TOKEN } from "../utils/constants";
-// import axios from "axios";
-// import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants";
-// import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -16,23 +14,31 @@ const StyledHeaderMenu = styled.ul`
   gap: 0.4rem;
 `;
 
-// const handleLogout = async () => {
-//   try {
-//     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-//     if (refreshToken) {
-//       await axios.post("http://127.0.0.1:8000/api/logout/", {
-//         refresh: refreshToken,
-//       });
-//       localStorage.removeItem(ACCESS_TOKEN);
-//       localStorage.removeItem(REFRESH_TOKEN);
-//     }
-//   } catch (error) {
-//     console.log("failed to logout", error);
-//   }
-// };
+
 
 function HeaderMenu() {
+
   const navigate = useNavigate();
+
+  // const [userData, setUserData] = useState({});
+const [username, setUsername] = useState();
+
+useEffect(() => {
+  axios
+    .get("http://127.0.0.1:8000/api/user", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    })
+    .then((response) => {
+      // setUserData(response.data);
+      setUsername(response.data.username);
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching user profile:", error);
+    });
+}, []);
 
   const handleLogout = async () => {
     try {
@@ -50,7 +56,8 @@ function HeaderMenu() {
         <ButtonIcon onClick={() => navigate("/settings")}>
           <FaRegUser />
           &nbsp;
-          <span>Profile</span>
+          {/* <span>Profile</span> */}
+          <span>{username}</span>
         </ButtonIcon>
       </li>
       <li>

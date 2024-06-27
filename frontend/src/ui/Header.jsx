@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import HeaderMenu from "./HeaderMenu";
+import Heading from "./Heading";
 
 const StyledHeader = styled.header`
   padding: 0.8rem 4.9rem;
@@ -7,12 +8,15 @@ const StyledHeader = styled.header`
   background-color: var(--color-grey-1);
   z-index: 1;
   /* border-bottom: 1px solid var(--color-grey-4); */
+  display: flex;
+  justify-content: space-between;
 `;
 
 function Header() {
   return (
     <>
       <StyledHeader>
+        <Heading as="h4">Personal Finance Management Sytem</Heading>
         <HeaderMenu />
       </StyledHeader>
     </>

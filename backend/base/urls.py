@@ -7,7 +7,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'budgets', BudgetViewSet, basename='budget')
-router.register(r'budgetentries', BudgetEntryViewSet, basename='budgetentry')
+# router.register(r'budgetentries', BudgetEntryList, basename='budgetentry')/
 router.register(r'reminders', ReminderViewSet, basename='reminder')
 router.register(r'transactions', TransactionViewSet, basename='transaction')
 router.register(r'accounttype', AccountTypeViewSet)
@@ -24,5 +24,8 @@ urlpatterns = [
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('transfer/', TransferFunds.as_view(), name='transfer-funds'),
+    path('budgets/<int:budget_id>/entries/', BudgetEntryList.as_view(), name='budget-entry-list'),
+    path('budget-entries/create/', BudgetEntryCreate.as_view(), name='budget-entry-create'),
+    path("user", UserInfoAPIView.as_view(), name="user-info"),
+    path('counts/', CountsView.as_view(), name='counts')
 ]
