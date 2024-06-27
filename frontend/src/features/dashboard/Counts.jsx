@@ -13,6 +13,7 @@ const Sticker = styled.div`
   background-color: var(--secondary-color-40);
   border-radius: var(--border-radius-lg);
   font-size: larger;
+  margin-bottom: 50px;
 `;
 const Span = styled.span`
   font-size: 5rem;
