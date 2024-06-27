@@ -16,7 +16,7 @@ function Header() {
   return (
     <>
       <StyledHeader>
-        <Heading as="h4">Personal Finance Management Sytem</Heading>
+        <Heading as="h4">Personal Finance Management System</Heading>
         <HeaderMenu />
       </StyledHeader>
     </>
