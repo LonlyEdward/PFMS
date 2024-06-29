@@ -58,7 +58,7 @@ class Transaction(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     transactiontype = models.ForeignKey(
         TransactionType, on_delete=models.CASCADE)

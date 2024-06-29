@@ -11,7 +11,6 @@ import CancelButton from "../../ui/CancelButton";
 import Line from "../../ui/Line";
 import toast from "react-hot-toast";
 
-
 function TransactionsOperations() {
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +43,7 @@ function TransactionsOperations() {
     amount: "",
     description: "",
     transactiontype: "",
+    date: "",
   });
 
   const handleChange = (e) => {
@@ -117,6 +117,15 @@ function TransactionsOperations() {
               type="number"
               name="amount"
               value={formData.amount}
+              onChange={handleChange}
+            />
+          </FormRow>
+          <Line />
+          <FormRow label="Transaction Date">
+            <Input
+              type="date"
+              name="date"
+              value={formData.date}
               onChange={handleChange}
             />
           </FormRow>

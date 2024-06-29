@@ -15,6 +15,7 @@ import Line from "../../ui/Line";
 import CancelButton from "../../ui/CancelButton";
 import toast from "react-hot-toast";
 import Select from "../../ui/Select";
+import Row from "../../ui/Row";
 
 function TransactionsTable() {
   const columns = [
@@ -31,6 +32,36 @@ function TransactionsTable() {
   const [selectedTransactionId, setSelectedTransactionId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  //-----
+
+  const monthOptions = [
+    { value: "1", label: "January" },
+    { value: "2", label: "February" },
+    { value: "3", label: "March" },
+    { value: "4", label: "April" },
+    { value: "5", label: "May" },
+    { value: "6", label: "June" },
+    { value: "7", label: "July" },
+    { value: "8", label: "August" },
+    { value: "9", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+  };
+
+  //-----
+
   const handleOpenEditModal = (transaction) => {
     setSelectedTransactionId(transaction.id);
     setFormData({
@@ -38,6 +69,7 @@ function TransactionsTable() {
       amount: transaction.amount,
       description: transaction.description,
       transactiontype: transaction.transactiontype,
+      date: transaction.date,
     });
     setShowEditModal(true);
   };
@@ -53,6 +85,10 @@ function TransactionsTable() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },
+        params: {
+          month: selectedMonth,
+          type: selectedType,
+        },
       }
     );
     console.log(response.data);
@@ -60,8 +96,8 @@ function TransactionsTable() {
   };
 
   useEffect(() => {
-    getTransactions();
-  }, []);
+    getTransactions(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMonth, selectedType]);
 
   const deleteTransaction = async (id) => {
     await axios.delete(`http://127.0.0.1:8000/api/transactions/${id}/`, {
@@ -78,6 +114,7 @@ function TransactionsTable() {
     amount: "",
     description: "",
     transactiontype: "",
+    date: "",
   });
 
   const handleChange = (e) => {
@@ -130,6 +167,24 @@ function TransactionsTable() {
 
   return (
     <>
+      <Row type="wrap">
+        <Select name="month" value={selectedMonth} onChange={handleMonthChange}>
+          <option value="">Select Month</option>
+          {monthOptions.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </Select>
+        <Select name="type" value={selectedType} onChange={handleTypeChange}>
+          <option value="">Select Type</option>
+          {options.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
+        </Select>
+      </Row>
       <Table>
         <TableHeader columns={columns} />
         <tbody>
@@ -188,6 +243,15 @@ function TransactionsTable() {
               type="number"
               name="amount"
               value={formData.amount}
+              onChange={handleChange}
+            />
+          </FormRow>
+          <Line />
+          <FormRow label="Transaction Date">
+            <Input
+              type="date"
+              name="date"
+              value={formData.date}
               onChange={handleChange}
             />
           </FormRow>

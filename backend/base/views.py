@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.views import APIView
 
+
 class CountsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -153,8 +154,22 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = TransactionSerializer
 
+    # def get_queryset(self):
+    #     return Transaction.objects.filter(customuser=self.request.user)
+
     def get_queryset(self):
-        return Transaction.objects.filter(customuser=self.request.user)
+        user = self.request.user
+        queryset = Transaction.objects.filter(customuser=user)
+
+        month = self.request.query_params.get('month')
+        if month:
+            queryset = queryset.filter(date__month=month)
+
+        transaction_type = self.request.query_params.get('type')
+        if transaction_type:
+            queryset = queryset.filter(transactiontype=transaction_type)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(customuser=self.request.user)
