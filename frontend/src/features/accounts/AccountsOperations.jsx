@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Button from "../../ui/Button";
 import { useState, useEffect } from "react";
 import Modal from "../../ui/Modal";
@@ -11,32 +10,12 @@ import CancelButton from "../../ui/CancelButton";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Select from "../../ui/Select";
-import { Link } from "react-router-dom";
 import Row from "../../ui/Row";
 
-
-const Span = styled.div`
-  font-size: 2rem;
-  color: var(--secondary-color-20);
-  margin-top: 4px;
-  margin-left: 8px;
-  transition-duration: 500ms;
-
-&:hover {
-  transform: scale(1.1);
-  color: var(--secondary-color-30);
-}
-`
-
-
 function AccountsOperations() {
-
   const [showAccountModal, setShowAccountModal] = useState(false);
   const handleOpenAccountModal = () => setShowAccountModal(true);
   const handleCloseAccountModal = () => setShowAccountModal(false);
-
-
-
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -104,7 +83,6 @@ function AccountsOperations() {
     <>
       <Row type="horizontal">
         <Button onClick={handleOpenAccountModal}>Add New Account</Button>
-        <Link to="/transfers"><Span>Transfers</Span></Link>
       </Row>
 
       <Modal

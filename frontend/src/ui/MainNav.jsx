@@ -5,8 +5,10 @@ import {
   MdOutlineAccountBox,
   MdOutlineTimer,
 } from "react-icons/md";
-import { BsBarChartLine, BsCalendarCheck } from "react-icons/bs";
+import { BsCalendarCheck } from "react-icons/bs";
+import { RiFileList2Line } from "react-icons/ri";
 import { TbArrowsRightLeft } from "react-icons/tb";
+import { FaRegChartBar } from "react-icons/fa";
 
 const NavList = styled.ul`
   display: flex;
@@ -73,8 +75,14 @@ function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/transactions">
+          <StyledNavLink to="/transfers">
             <TbArrowsRightLeft />
+            <span>Transfers</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/transactions">
+            <RiFileList2Line />
             <span>Transactions</span>
           </StyledNavLink>
         </li>
@@ -92,7 +100,8 @@ function MainNav() {
         </li>
         <li>
           <StyledNavLink to="/reports">
-            <BsBarChartLine />
+            {/* <BsBarChartLine /> */}
+            <FaRegChartBar />
             <span>Reports</span>
           </StyledNavLink>
         </li>

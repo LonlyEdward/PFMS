@@ -1,4 +1,4 @@
-import Error from "../../public/error.jpg";
+import Error from "../assets/error.jpg";
 import React from "react";
 import styled from "styled-components"
 import Heading from "../ui/Heading"

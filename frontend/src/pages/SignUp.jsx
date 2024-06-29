@@ -8,7 +8,7 @@ const SignupLayout = styled.main`
   align-content: center;
   justify-content: center;
   gap: 3.2rem;
-  background-color: var(--color-grey-2);
+  background-color: var(--color-grey-3);
 `;
 
 function SignUp() {

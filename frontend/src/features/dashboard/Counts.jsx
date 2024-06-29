@@ -19,6 +19,10 @@ const Span = styled.span`
   font-size: 5rem;
 `;
 
+const SRow = styled(Row)`
+  gap: 4.5rem;
+`
+
 const Counts = () => {
   const [counts, setCounts] = useState({
     transactions: 0,
@@ -41,7 +45,7 @@ const Counts = () => {
   }, []);
 
   return (
-    <Row type="wrap">
+    <SRow type="wrap">
       <Sticker>
         Total Transactions<Span>{counts.transactions}</Span>
       </Sticker>
@@ -54,7 +58,7 @@ const Counts = () => {
       <Sticker>
         Total Budgets<Span>{counts.budgets}</Span>
       </Sticker>
-    </Row>
+    </SRow>
   );
 };
 

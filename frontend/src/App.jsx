@@ -5,6 +5,8 @@ import GlobalStyles from "./styles/GlobalStyles";
 import Dashboard from "./pages/Dashboard";
 import Accounts from "./pages/Accounts";
 import Transactions from "./pages/Transactions";
+import TransactionsReport from "./pages/TransactionsReport";
+import BudgetsReport from "./pages/BudgetsReport";
 import Budgets from "./pages/Budgets";
 import Reminders from "./pages/Reminders";
 import Settings from "./pages/Settings";
@@ -34,6 +36,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="accounts" element={<Accounts />} />
             <Route path="transactions" element={<Transactions />} />
+            <Route path="transactionsreport" element={<TransactionsReport />} />
+            <Route path="budgetsreport" element={<BudgetsReport />} />
             <Route path="transfers" element={<Transfers />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="/budgets/:budgetId/entries" element={<BudgetEntries />} />

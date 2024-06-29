@@ -11,21 +11,6 @@ import Textarea from "../../ui/Textarea";
 import Select from "../../ui/Select";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-
-const Span = styled.div`
-  font-size: 2rem;
-  color: var(--secondary-color-20);
-  margin-top: 4px;
-  margin-left: 8px;
-  transition-duration: 500ms;
-
-&:hover {
-  transform: scale(1.1);
-  color: var(--secondary-color-30);
-}
-`
 
 function TransfersOperations() {
   const [showTransferModal, setShowTransferModal] = useState(false);
@@ -99,7 +84,6 @@ function TransfersOperations() {
     <>
       <Row type="horizontal">
         <Button onClick={handleOpenTransferModal}>New Transfer</Button>
-        <Link to="/accounts"><Span>Go back</Span></Link>
       </Row>
 
       <Modal
