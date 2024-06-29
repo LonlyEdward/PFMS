@@ -1,8 +1,8 @@
-import Chart from "../features/reports/Chart";
 import Row from "../ui/Row";
 import Heading from "../ui/Heading";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
+import TransactionsBarChart from "../features/reports/TransactionsBarChart";
 
 function TransactionsReport() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function TransactionsReport() {
         <Heading>Transactions Reports</Heading>
         <Button onClick={() => navigate("/reports")}>Go back</Button>
       </Row>
-      <Chart />
+      <TransactionsBarChart />
     </>
   );
 }

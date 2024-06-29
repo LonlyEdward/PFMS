@@ -28,7 +28,7 @@ const CardHeader = styled.h2`
 
 const CardContent = styled.div`
   /* margin: 10px 0; */
-  margin: 4px 0;
+  /* margin: 4px 0; */
   color: var(--color-grey-7);
 `;
 
