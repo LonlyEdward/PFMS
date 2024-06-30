@@ -147,6 +147,11 @@ class BudgetSummaryView(APIView):
     def get(self, request, pk):
         budget = Budget.objects.get(pk=pk, customuser=request.user)
         total_entries_amount = budget.total_entries_amount()
+
+        # Serialize budget entries
+        entries = budget.entries.all()
+        serialized_entries = BudgetEntrySerializer(entries, many=True).data
+
         data = {
             "name": budget.name,
             "description": budget.description,
@@ -156,6 +161,7 @@ class BudgetSummaryView(APIView):
             "total_entries_amount": total_entries_amount,
             "is_exceeded": total_entries_amount > budget.amount,
             "exceeded_amount": max(0, total_entries_amount - budget.amount),
+            "entries": serialized_entries  # Include the serialized entries
         }
         return Response(data)
 
@@ -212,3 +218,27 @@ class UserInfoAPIView(RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class RecentTransactionsView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        # Query the most recent transactions, limit to 4
+        recent_transactions = Transaction.objects.filter(
+            customuser=request.user
+        ).order_by('-date')[:5]
+
+        # Serialize the transactions data
+        data = [
+            {
+                'id': transaction.id,
+                'date': transaction.date,
+                'name': transaction.name,
+                'amount': transaction.amount,
+                'description': transaction.description,
+            }
+            for transaction in recent_transactions
+        ]
+
+        return Response(data)

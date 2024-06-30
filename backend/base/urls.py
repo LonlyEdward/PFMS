@@ -30,6 +30,8 @@ urlpatterns = [
          name='budget-entry-create'),
     path("user", UserInfoAPIView.as_view(), name="user-info"),
     path('counts/', CountsView.as_view(), name='counts'),
+    path('recent-transactions/', RecentTransactionsView.as_view(),
+         name='recent-transactions'),
     path('budgets/<int:pk>/summary/',
          BudgetSummaryView.as_view(), name='budget-summary')
 ]
