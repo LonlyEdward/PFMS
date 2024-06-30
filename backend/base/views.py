@@ -141,6 +141,25 @@ class BudgetEntryCreate(generics.CreateAPIView):
     serializer_class = BudgetEntrySerializer
 
 
+class BudgetSummaryView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        budget = Budget.objects.get(pk=pk, customuser=request.user)
+        total_entries_amount = budget.total_entries_amount()
+        data = {
+            "name": budget.name,
+            "description": budget.description,
+            "amount": budget.amount,
+            "start_date": budget.start_date,
+            "end_date": budget.end_date,
+            "total_entries_amount": total_entries_amount,
+            "is_exceeded": total_entries_amount > budget.amount,
+            "exceeded_amount": max(0, total_entries_amount - budget.amount),
+        }
+        return Response(data)
+
+
 class BudgetEntryList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BudgetEntrySerializer

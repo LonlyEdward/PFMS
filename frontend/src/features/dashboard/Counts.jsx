@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Row from "../../ui/Row";
 
 const Sticker = styled.div`
-  color: var(--color-grey-5);
+  color: var(--color-grey-4);
   display: flex;
   flex-direction: column-reverse;
   text-align: center;
@@ -21,7 +21,7 @@ const Span = styled.span`
 
 const SRow = styled(Row)`
   gap: 4.5rem;
-`
+`;
 
 const Counts = () => {
   const [counts, setCounts] = useState({
@@ -47,16 +47,16 @@ const Counts = () => {
   return (
     <SRow type="wrap">
       <Sticker>
-        Total Transactions<Span>{counts.transactions}</Span>
+        Transactions<Span>{counts.transactions}</Span>
       </Sticker>
       <Sticker>
-        Total Reminders <Span>{counts.reminders}</Span>
+        Reminders <Span>{counts.reminders}</Span>
       </Sticker>
       <Sticker>
-        Total Accounts <Span>{counts.bank_accounts}</Span>
+        Accounts <Span>{counts.bank_accounts}</Span>
       </Sticker>
       <Sticker>
-        Total Budgets<Span>{counts.budgets}</Span>
+        Budgets<Span>{counts.budgets}</Span>
       </Sticker>
     </SRow>
   );

@@ -79,11 +79,15 @@ class Budget(models.Model):
     def __str__(self):
         return self.name
 
+    def total_entries_amount(self):
+        return sum(entry.amount for entry in self.entries.all())
+
 
 class BudgetEntry(models.Model):
     name = models.CharField(max_length=30)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    budget = models.ForeignKey(Budget, related_name='entries',  on_delete=models.CASCADE)
+    budget = models.ForeignKey(
+        Budget, related_name='entries',  on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -97,4 +101,3 @@ class Reminder(models.Model):
 
     def __str__(self):
         return self.name
-

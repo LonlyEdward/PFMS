@@ -7,8 +7,6 @@ import { FaClipboardList } from "react-icons/fa";
 import ReportCard from "../ui/ReportCard";
 import { useNavigate } from "react-router-dom";
 
-// import Chart from "../features/reports/Chart";
-
 const ReportRow = styled(Row)`
   gap: 5rem;
 `;
@@ -40,12 +38,16 @@ function Reports() {
         <ReportCard>
           <BsCalendar2CheckFill />
           <Span>Budgets</Span>
-          <ReportButton onClick={() => navigate("/budgetsreport")}>Generate Report</ReportButton>
+          <ReportButton onClick={() => navigate("/budgetsreport")}>
+            Generate Report
+          </ReportButton>
         </ReportCard>
         <ReportCard>
           <FaClipboardList />
           <Span>Transactions</Span>
-          <ReportButton onClick={() => navigate("/transactionsreport")}>Generate Report</ReportButton>
+          <ReportButton onClick={() => navigate("/transactionsreport")}>
+            Generate Report
+          </ReportButton>
         </ReportCard>
       </ReportRow>
     </>

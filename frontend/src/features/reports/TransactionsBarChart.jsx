@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Heading from "../../ui/Heading";
 import {
   BarChart,
   Bar,
@@ -16,6 +17,10 @@ const Ul = styled.ul`
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+`;
+
+const SHeading = styled(Heading)`
+  text-align: center;
 `;
 
 const TransactionsBarChart = () => {
@@ -67,8 +72,8 @@ const TransactionsBarChart = () => {
   }, []);
 
   return (
-    <div>
-      <h3>Monthly Income and Expenses</h3>
+    <>
+      <SHeading>Monthly Income and Expenses</SHeading>
       <ResponsiveContainer width="100%" height={400} margin={{ left: 20 }}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -97,7 +102,7 @@ const TransactionsBarChart = () => {
           ))}
         </Ul>
       </div>
-    </div>
+    </>
   );
 };
 

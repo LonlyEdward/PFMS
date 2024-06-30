@@ -14,29 +14,17 @@ import Form from "../ui/Form";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import CancelButton from "../ui/CancelButton";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import Select from "../ui/Select";
-
-const Span = styled.div`
-  font-size: 2rem;
-  color: var(--secondary-color-20);
-  margin-top: 4px;
-  margin-left: 8px;
-  transition-duration: 500ms;
-
-  &:hover {
-    transform: scale(1.1);
-    color: var(--secondary-color-30);
-  }
-`;
+import { useNavigate } from "react-router-dom";
 
 const Sdiv = styled.div`
   display: flex;
 `;
 
 const BudgetEntries = () => {
+  const navigate = useNavigate();
   const columns = ["Name", "Amount"];
 
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
@@ -144,9 +132,8 @@ const BudgetEntries = () => {
         <Heading>Budget Entries for the budget {budgetName}</Heading>
         <Sdiv>
           <Button onClick={handleOpenNewEntryModal}>New Entry</Button>
-          <Link to="/budgets">
-            <Span>Go back</Span>
-          </Link>
+          &nbsp;&nbsp;&nbsp;
+          <Button onClick={() => navigate("/budgets")}>Go Back</Button>
         </Sdiv>
       </Row>
       ;
@@ -195,7 +182,7 @@ const BudgetEntries = () => {
           </FormRow>
           <Line />
           <FormRow label="Budget">
-          <Select
+            <Select
               name="budget"
               value={formData.budget}
               onChange={handleChange}

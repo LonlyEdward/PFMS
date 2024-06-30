@@ -9,7 +9,7 @@ function TransactionsReport() {
   return (
     <>
       <Row type="horizontal">
-        <Heading>Transactions Reports</Heading>
+        <Heading as="h1">Transactions Reports</Heading>
         <Button onClick={() => navigate("/reports")}>Go back</Button>
       </Row>
       <TransactionsBarChart />

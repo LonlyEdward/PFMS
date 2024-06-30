@@ -24,8 +24,12 @@ urlpatterns = [
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('budgets/<int:budget_id>/entries/', BudgetEntryList.as_view(), name='budget-entry-list'),
-    path('budget-entries/create/', BudgetEntryCreate.as_view(), name='budget-entry-create'),
+    path('budgets/<int:budget_id>/entries/',
+         BudgetEntryList.as_view(), name='budget-entry-list'),
+    path('budget-entries/create/', BudgetEntryCreate.as_view(),
+         name='budget-entry-create'),
     path("user", UserInfoAPIView.as_view(), name="user-info"),
-    path('counts/', CountsView.as_view(), name='counts')
+    path('counts/', CountsView.as_view(), name='counts'),
+    path('budgets/<int:pk>/summary/',
+         BudgetSummaryView.as_view(), name='budget-summary')
 ]

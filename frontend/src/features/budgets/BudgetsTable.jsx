@@ -29,8 +29,6 @@ const columns = [
 function BudgetsTable() {
   const navigate = useNavigate();
 
-  // const [showBudgetModal, setShowBudgetModal] = useState(false);
-
   const [selectedBudgetId, setSelectedBudgetId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -48,9 +46,6 @@ function BudgetsTable() {
   };
 
   const handleCloseEditModal = () => setShowEditModal(false);
-
-  // const handleOpenBudgetModal = () => setShowBudgetModal(true);
-  // const handleCloseBudgetModal = () => setShowBudgetModal(false);
 
   const [budgets, setBudgets] = useState([]);
 
@@ -139,7 +134,7 @@ function BudgetsTable() {
                   size="small"
                   onClick={() => handleOpenEditModal(budget)}
                 >
-                  Edit{" "}
+                  Edit
                 </BlueButton>
                 &nbsp;
                 <BlueButton size="small" onClick={() => viewEntries(budget.id)}>
@@ -217,18 +212,6 @@ function BudgetsTable() {
           </FormRow>
         </Form>
       </Modal>
-      {/* <Modal
-        show={showBudgetModal}
-        handleClose={handleCloseBudgetModal}
-        title="Budget Entries"
-        footer={
-          <>
-            <BlueButton onClick={handleCloseBudgetModal}>Close</BlueButton>
-          </>
-        }
-      >
-        <p>Preview of selected budget entires</p>
-      </Modal> */}
     </>
   );
 }
