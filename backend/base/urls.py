@@ -33,5 +33,11 @@ urlpatterns = [
     path('recent-transactions/', RecentTransactionsView.as_view(),
          name='recent-transactions'),
     path('budgets/<int:pk>/summary/',
-         BudgetSummaryView.as_view(), name='budget-summary')
+         BudgetSummaryView.as_view(), name='budget-summary'),
+    path('budget_entries/<int:pk>/update/',
+         BudgetEntryUpdate.as_view(), name='budget-entry-update'),
+    path('budget_entries/<int:pk>/delete/', BudgetEntryDelete.as_view(), name='budget-entry-delete'),    path(
+        'budget_entries/<int:pk>/update/', BudgetEntryUpdate.as_view(), name='budget-entry-update'),
+    path('budget_entries/<int:pk>/delete/',
+         BudgetEntryDelete.as_view(), name='budget-entry-delete'),
 ]

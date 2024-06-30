@@ -242,3 +242,15 @@ class RecentTransactionsView(APIView):
         ]
 
         return Response(data)
+
+
+class BudgetEntryUpdate(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = BudgetEntry.objects.all()
+    serializer_class = BudgetEntrySerializer
+
+
+class BudgetEntryDelete(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = BudgetEntry.objects.all()
+    serializer_class = BudgetEntrySerializer

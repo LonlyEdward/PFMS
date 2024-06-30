@@ -18,6 +18,7 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import Select from "../ui/Select";
 import { useNavigate } from "react-router-dom";
+import BlueButton from "../ui/BlueButton";
 
 const Sdiv = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ const Sdiv = styled.div`
 
 const BudgetEntries = () => {
   const navigate = useNavigate();
-  const columns = ["Name", "Amount"];
+  const columns = ["Name", "Amount", "Actions"];
 
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
   const handleOpenNewEntryModal = () => setShowNewEntryModal(true);
@@ -126,6 +127,73 @@ const BudgetEntries = () => {
     }
   };
 
+  const [selectedEntryId, setSelectedEntryId] = useState(null);
+  const [showEditEntryModal, setShowEditEntryModal] = useState(false);
+
+  const handleOpenEditEntryModal = (entry) => {
+    setSelectedEntryId(entry.id);
+    setEntryFormData({
+      name: entry.name,
+      amount: entry.amount,
+      budget: entry.budget,
+    });
+    setShowEditEntryModal(true);
+  };
+
+  const handleCloseEditEntryModal = () => setShowEditEntryModal(false);
+
+  const [entryFormData, setEntryFormData] = useState({
+    name: "",
+    amount: "",
+    budget: "",
+  });
+
+  const handleEntryChange = (e) => {
+    setEntryFormData({
+      ...entryFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const updateEntry = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/budget_entries/${selectedEntryId}/update/`,
+        entryFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      toast.success("Entry updated successfully");
+      setShowEditEntryModal(false);
+      getBudgets();
+    } catch (error) {
+      console.error("There was an error updating the entry!", error);
+      toast.error("Failed to update the entry");
+    }
+  };
+
+  const deleteEntry = async (id) => {
+    try {
+      await axios.delete(
+        `http://127.0.0.1:8000/api/budget_entries/${id}/delete/`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      toast.success("Entry deleted successfully");
+      getBudgets();
+    } catch (error) {
+      console.error("There was an error deleting the entry!", error);
+      toast.error("Failed to delete the entry");
+    }
+  };
+
   return (
     <>
       <Row type="horizontal">
@@ -144,6 +212,22 @@ const BudgetEntries = () => {
             <TableRow key={index}>
               <TableCell>{entry.name}</TableCell>
               <TableCell>{entry.amount}</TableCell>
+              <TableCell>
+                <BlueButton
+                  size="small"
+                  onClick={() => handleOpenEditEntryModal(entry)}
+                >
+                  Edit
+                </BlueButton>
+                &nbsp;
+                <Button
+                  size="small"
+                  variation="danger"
+                  onClick={() => deleteEntry(entry.id)}
+                >
+                  Delete
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </tbody>
@@ -178,6 +262,55 @@ const BudgetEntries = () => {
               name="amount"
               value={formData.amount}
               onChange={handleChange}
+            />
+          </FormRow>
+          <Line />
+          <FormRow label="Budget">
+            <Select
+              name="budget"
+              value={formData.budget}
+              onChange={handleChange}
+            >
+              <option value="">--Select an option--</option>
+              {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
+          </FormRow>
+        </Form>
+      </Modal>
+      <Modal
+        show={showEditEntryModal}
+        handleClose={handleCloseEditEntryModal}
+        title="Edit Budget Entry"
+        footer={
+          <>
+            <CancelButton onClick={handleCloseEditEntryModal}>
+              Cancel
+            </CancelButton>
+            &nbsp;&nbsp;&nbsp;
+            <BlueButton onClick={updateEntry}>Update Entry</BlueButton>
+          </>
+        }
+      >
+        <Form type="modal">
+          <FormRow label="Name">
+            <Input
+              type="text"
+              name="name"
+              value={entryFormData.name}
+              onChange={handleEntryChange}
+            />
+          </FormRow>
+          <Line />
+          <FormRow label="Amount">
+            <Input
+              type="number"
+              name="amount"
+              value={entryFormData.amount}
+              onChange={handleEntryChange}
             />
           </FormRow>
           <Line />
