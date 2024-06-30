@@ -16,6 +16,7 @@ import CancelButton from "../../ui/CancelButton";
 import toast from "react-hot-toast";
 import Select from "../../ui/Select";
 import Row from "../../ui/Row";
+import Heading from "../../ui/Heading";
 
 function TransactionsTable() {
   const columns = [
@@ -26,13 +27,6 @@ function TransactionsTable() {
     "Transaction Type",
     "Actions",
   ];
-
-  // const handleOpenEditModal = () => setShowEditModal(true);
-
-  const [selectedTransactionId, setSelectedTransactionId] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-
-  //-----
 
   const monthOptions = [
     { value: "1", label: "January" },
@@ -51,6 +45,23 @@ function TransactionsTable() {
 
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [selectedTransactionId, setSelectedTransactionId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    amount: "",
+    description: "",
+    transactiontype: "",
+    date: "",
+  });
+  const [options, setOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    getTransactions();
+    getTransactiontypes(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMonth, selectedType]);
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
@@ -60,7 +71,44 @@ function TransactionsTable() {
     setSelectedType(e.target.value);
   };
 
-  //-----
+  const getTransactions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/transactions/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+          params: {
+            month: selectedMonth,
+            type: selectedType,
+          },
+        }
+      );
+      setTransactions(response.data);
+    } catch (error) {
+      console.error("Error fetching transactions: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getTransactiontypes = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/transactiontype/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      setOptions(response.data);
+    } catch (error) {
+      console.error("Error fetching transaction types: ", error);
+    }
+  };
 
   const handleOpenEditModal = (transaction) => {
     setSelectedTransactionId(transaction.id);
@@ -76,46 +124,20 @@ function TransactionsTable() {
 
   const handleCloseEditModal = () => setShowEditModal(false);
 
-  const [transactions, setTransactions] = useState([]);
-
-  const getTransactions = async () => {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/transactions/",
-      {
+  const deleteTransaction = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/transactions/${id}/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },
-        params: {
-          month: selectedMonth,
-          type: selectedType,
-        },
-      }
-    );
-    console.log(response.data);
-    setTransactions(response.data);
+      });
+      toast.success("Transaction deleted successfully");
+      getTransactions();
+    } catch (error) {
+      console.error("Error deleting transaction: ", error);
+      toast.error("Failed to delete the transaction");
+    }
   };
-
-  useEffect(() => {
-    getTransactions(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMonth, selectedType]);
-
-  const deleteTransaction = async (id) => {
-    await axios.delete(`http://127.0.0.1:8000/api/transactions/${id}/`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access")}`,
-      },
-    });
-    toast.success("Transaction deleted successfully");
-    getTransactions();
-  };
-
-  const [formData, setFormData] = useState({
-    name: "",
-    amount: "",
-    description: "",
-    transactiontype: "",
-    date: "",
-  });
 
   const handleChange = (e) => {
     setFormData({
@@ -140,30 +162,10 @@ function TransactionsTable() {
       setShowEditModal(false);
       getTransactions();
     } catch (error) {
-      console.error("There was an error updating the item!", error);
-      toast.error("Failed to update the Transaction");
+      console.error("Error updating transaction: ", error);
+      toast.error("Failed to update the transaction");
     }
   };
-
-  const [options, setOptions] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  const getTransactiontypes = async () => {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/transactiontype/",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      }
-    );
-    console.log(response.data);
-    setOptions(response.data);
-  };
-
-  useEffect(() => {
-    getTransactiontypes();
-  }, []);
 
   return (
     <>
@@ -185,36 +187,43 @@ function TransactionsTable() {
           ))}
         </Select>
       </Row>
-      <Table>
-        <TableHeader columns={columns} />
-        <tbody>
-          {transactions.map((transaction, index) => (
-            <TableRow key={index}>
-              <TableCell>{transaction.name}</TableCell>
-              <TableCell>{transaction.description}</TableCell>
-              <TableCell>{transaction.amount}</TableCell>
-              <TableCell>{transaction.date}</TableCell>
-              <TableCell>{transaction.transactiontype_name}</TableCell>
-              <TableCell>
-                <BlueButton
-                  size="small"
-                  onClick={() => handleOpenEditModal(transaction)}
-                >
-                  Edit
-                </BlueButton>
-                &nbsp;
-                <Button
-                  size="small"
-                  variation="danger"
-                  onClick={() => deleteTransaction(transaction.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </tbody>
-      </Table>
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : transactions.length === 0 ? (
+        <Heading as="h4">No transactions found.</Heading>
+      ) : (
+        <Table>
+          <TableHeader columns={columns} />
+          <tbody>
+            {transactions.map((transaction, index) => (
+              <TableRow key={index}>
+                <TableCell>{transaction.name}</TableCell>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell>{transaction.amount}</TableCell>
+                <TableCell>{transaction.date}</TableCell>
+                <TableCell>{transaction.transactiontype_name}</TableCell>
+                <TableCell>
+                  <BlueButton
+                    size="small"
+                    onClick={() => handleOpenEditModal(transaction)}
+                  >
+                    Edit
+                  </BlueButton>
+                  &nbsp;
+                  <Button
+                    size="small"
+                    variation="danger"
+                    onClick={() => deleteTransaction(transaction.id)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
+      )}
 
       <Modal
         show={showEditModal}
