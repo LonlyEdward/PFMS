@@ -224,7 +224,7 @@ class RecentTransactionsView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        # Query the most recent transactions, limit to 4
+        # Query the most recent transactions
         recent_transactions = Transaction.objects.filter(
             customuser=request.user
         ).order_by('-date')[:5]
